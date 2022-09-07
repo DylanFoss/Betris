@@ -137,11 +137,6 @@ void display()
 void init()
 {
 	t1 = std::chrono::high_resolution_clock::now();
-	//board.grid.at(6).at(7) = 1; board.grid.at(6).at(9) = 1;
-	//board.grid.at(4).at(7) = 1; board.grid.at(4).at(9) = 1;
-	//board.grid.at(5).at(6) = 1; board.grid.at(5).at(9) = 1;
-	//board.grid.at(8).at(8) = 1; board.grid.at(8).at(9) = 1;
-	//board.grid.at(7).at(9) = 1;
 
 	game.Init();
 }

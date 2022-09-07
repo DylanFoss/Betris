@@ -77,10 +77,8 @@ public:
 
 	void clearBackground() const
 	{
-		unsigned int x, y;
-		for (y = 0; y < screenHeight; y++)
-		{
-			for (x = 0; x < screenWidth; x++) { pixel(x, y, 0, 0, 0); } //clear background color
-		}
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
+
 };
