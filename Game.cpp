@@ -108,28 +108,26 @@ void Game::Update(const double dt)
 			{
 				currentTetromino.Lock();
 
-				int firstY = 0;
-				int lines = 0;
+				std::vector<int> linesToClear;
 
 				//check for lines
 				for (int y = 0; y < 4; y++)
-					if (board.GetGridY(currentTetromino.y + cellSize * y) < board.boardHeight - 1 && board.GetGridY(currentTetromino.y + cellSize * y) >= 0)
+					if (board.GetGridY(currentTetromino.y) + y < board.boardHeight - 1 && board.GetGridY(currentTetromino.y) + y >= 0)
 					{
 						bool line = true;
 						for (int x = 0; x < board.boardWidth; x++)
-							line &= board.grid[board.GetGridY(currentTetromino.y + cellSize * y)][x] != 0;
+							line &= board.grid[board.GetGridY(currentTetromino.y) + y][x] != 0;
 
 						if (line)
 						{
-							if (lines == 0) firstY = board.GetGridY(currentTetromino.y + cellSize * y);
-							lines++;
+							linesToClear.push_back(board.GetGridY(currentTetromino.y) + y);
 						}
 					}
 
-				if (lines != 0)
+				if (linesToClear.size() != 0)
 				{
-					printf("Number of Lines: %d, begining at Grid Y: %d \n",lines, firstY);
-					board.ClearLines(firstY, lines);
+					printf("Number of Lines: %d\n",linesToClear.size());
+					board.ClearLines(linesToClear);
 				}
 
 				UpdateTetrominoes();

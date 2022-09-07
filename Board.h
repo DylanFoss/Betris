@@ -23,6 +23,7 @@ public:
 	int GetGridY(int y) const;
 
 	void ClearLines(int gridY, int numLines);
+	void ClearLines(const std::vector<int> &linesToClear);
 
 	void Draw();
 };

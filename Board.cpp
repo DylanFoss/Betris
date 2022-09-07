@@ -66,7 +66,18 @@ void Board::ClearLines(int gridY, int numLines)
 				grid[y][x] = grid[y + 1][x];
 			}
 		}
+}
 
+void Board::ClearLines(const std::vector<int> &linesToClear)
+{
+	for (int lines = linesToClear.size()-1; lines > -1; lines--)
+		for (int x = 0; x < boardWidth; x++)
+		{
+			for (int y = linesToClear.at(lines); y < boardHeight - 1; y++)
+			{
+				grid[y][x] = grid[y + 1][x];
+			}
+		}
 }
 
 void Board::Draw()

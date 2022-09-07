@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <vector>
 #include <stack>
 #include <algorithm>
 #include <random>
