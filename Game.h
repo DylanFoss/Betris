@@ -11,6 +11,7 @@
 
 #include "Board.h"
 #include "Tetromino.h"
+#include "GhostPiece.h"
 
 class Game
 {
@@ -21,6 +22,8 @@ private:
 
 	Board board;
 	Tetromino currentTetromino;
+	GhostPiece ghostPiece;
+
 	Tetromino heldTetromino;
 
 	Tetromino queue1;

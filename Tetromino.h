@@ -17,12 +17,11 @@ enum class Type
 
 class Tetromino
 {
-private:
+protected:
+
 	Type type;
 	Board* board;
 	const Renderer* renderer;
-
-	unsigned char tiles[4][4];
 
 public:
 
@@ -32,6 +31,7 @@ public:
 
 	int x, y;
 	int rotation;
+	unsigned char tiles[4][4];
 
 	Tetromino();
 	Tetromino(const Renderer* renderer, Board* board, int X, int Y, Type type);

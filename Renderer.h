@@ -68,6 +68,27 @@ public:
 		}
 	}
 
+	void drawHollowSquare(int cellSize, int x, int y, int r, int g, int b) const
+	{
+		for (int i = 0; i < cellSize; i++)
+		{
+			for (int j = 0; j < cellSize; j++)
+			{
+				if (i == 0 && (j == 0 || j == cellSize - 1))
+					pixel(x + (j), y + (i), std::max(r - 30, 0), std::max(g - 30, 0), std::max(b - 30, 0));
+				else if (i == cellSize - 1 && (j == 0 || j == cellSize - 1))
+					pixel(x + (j), y + (i), std::min(r + 20, 255), std::min(g + 20, 255), std::min(b + 20, 255));
+				else if (j == 0 || j == cellSize - 1)
+					pixel(x + (j), y + (i), std::max(r - 20, 0), std::max(g - 20, 0), std::max(b - 20, 0));		// side lines
+				else if (i == 0)
+					pixel(x + (j), y + (i), std::max(r - 40, 0), std::max(g - 40, 0), std::max(b - 40, 0));							// bottom line
+				else if (i == cellSize - 1)
+					pixel(x + (j), y + (i), std::min(r + 60, 255), std::min(g + 60, 255), std::min(b + 60, 255));					// top line
+				else;
+			}
+		}
+	}
+
 	void Fill(int x1, int y1, int x2, int y2)
 	{
 		for (int y = y1; y < y2; y++)

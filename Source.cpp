@@ -16,8 +16,8 @@
 #include "Tetromino.h"
 #include "Board.h"
 
-#define res			1						//0=160x120 1=360x240 4=640x480
-#define SW         160*res                  //screen width
+#define res			1				//0=160x120 1=360x240 4=640x480
+#define SW         190*res                  //screen width
 #define SH         160*res                  //screen height
 #define SW2        (SW/2)                   //half of screen width
 #define SH2        (SH/2)                   //half of screen height

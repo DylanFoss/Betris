@@ -9,6 +9,7 @@ Game::Game(const Renderer* renderer, InputManager* input)
 {
 	board = Board(renderer, BW, BH, cellSize, 0+cellSize, 0+cellSize);
 	currentTetromino = Tetromino(renderer, &board, 5 * cellSize + cellSize, 14 * cellSize + cellSize, Type::I);
+	ghostPiece = GhostPiece(currentTetromino);
 	queue1 = Tetromino(renderer, &board, 16 * cellSize + cellSize, 14 * cellSize + cellSize, Type::I);
 	queue2 = Tetromino(renderer, &board, 16 * cellSize + cellSize, 11 * cellSize + cellSize, Type::I);
 	queue3 = Tetromino(renderer, &board, 16 * cellSize + cellSize, 7 * cellSize + cellSize, Type::I);
@@ -90,6 +91,7 @@ void Game::Init()
 		GenerateTetrominoes();
 
 	currentTetromino.Reset(static_cast<Type>(GetNext()), 5 * cellSize + cellSize, 14 * cellSize + cellSize);
+	ghostPiece.UpdatePosition(currentTetromino);
 	queue1.Reset(static_cast<Type>(GetNext()), 16 * cellSize + cellSize, 14 * cellSize + cellSize);
 	queue2.Reset(static_cast<Type>(GetNext()), 16 * cellSize + cellSize, 9 * cellSize + cellSize);
 	queue3.Reset(static_cast<Type>(GetNext()), 16 * cellSize + cellSize, 4 * cellSize + cellSize);
@@ -103,6 +105,7 @@ void Game::Update(const double dt)
 	{
 		MoveTetromino(dt);
 		RotateTetromino();
+		ghostPiece.UpdatePosition(currentTetromino);
 
 		if (logicCounter < 1) //update every 1 second
 		{
@@ -110,6 +113,7 @@ void Game::Update(const double dt)
 		}
 		else
 		{
+
 			if (!currentTetromino.Advance())
 			{
 				currentTetromino.Lock();
@@ -152,6 +156,7 @@ void Game::Update(const double dt)
 void Game::Draw()
 {
 	board.Draw();
+	ghostPiece.Draw();
 	currentTetromino.Draw();
 
 	queue1.Draw();
