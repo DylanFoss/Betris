@@ -48,13 +48,19 @@ void Game::MoveTetromino(const double dt)
 {
 	int x = 0, y = 0;
 
-	if (input->IsKeyPressedRepeatable('s', dt))
-	{
-		if (!currentTetromino.CollisionCheck(currentTetromino.x, currentTetromino.y-cellSize))
-			logicCounter = 1000;
-	}
 	if (input->IsKeyPressedRepeatable('a', dt)) x -= 1;
 	if (input->IsKeyPressedRepeatable('d', dt)) x += 1;
+
+	if (input->IsKeyPressed(32))
+	{
+		while (currentTetromino.Advance());
+		logicCounter = 1000;
+	}
+	else if (input->IsKeyPressedRepeatable('s', dt))
+	{
+		if (!currentTetromino.CollisionCheck(currentTetromino.x, currentTetromino.y - cellSize))
+			logicCounter = 1000;
+	}
 
 	if (x != 0 || y != 0)
 	{
