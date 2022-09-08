@@ -113,10 +113,8 @@ void display()
 
 	game.Update(delta);
 
-	//std::cout << delta << '\n';
-
 	//Draw
-	if (T.fr1 - T.fr2 >= 50)                        //only draw 20 frames/second
+	if (T.fr1 - T.fr2 >= 16.6f)                        //only draw 60 frames/second
 	{
 		renderer.clearBackground();
 
@@ -145,12 +143,14 @@ void init()
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(GLSW / 2, GLSH / 2);
 	glutInitWindowSize(GLSW, GLSH);
 	glutCreateWindow("Betris - Press Alpha Build");
 	glPointSize(pixelScale);                        //pixel size
 	gluOrtho2D(0, GLSW, 0, GLSH);                   //origin bottom left
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+	glEnable(GL_BLEND);
 	init();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(KeysDown);

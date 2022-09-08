@@ -41,7 +41,7 @@ public:
 
 	void pixel(int x, int y, int r = 0, int g = 0, int b = 0) const               //draw a pixel at x/y with rgb
 	{
-		glColor3ub(r, g, b);
+		glColor4ub(r, g, b, 255);
 		glBegin(GL_POINTS);
 		glVertex2i(x * pixelScale + 2, y * pixelScale + 2);
 		glEnd();
