@@ -39,9 +39,9 @@ public:
 		glEnd();
 	}
 
-	void pixel(int x, int y, int r = 0, int g = 0, int b = 0) const               //draw a pixel at x/y with rgb
+	void pixel(int x, int y, int r = 0, int g = 0, int b = 0, int a = 255) const               //draw a pixel at x/y with rgb
 	{
-		glColor4ub(r, g, b, 255);
+		glColor4ub(r, g, b, a);
 		glBegin(GL_POINTS);
 		glVertex2i(x * pixelScale + 2, y * pixelScale + 2);
 		glEnd();
@@ -100,6 +100,11 @@ public:
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	float lerp(float a, float b, float t)
+	{
+		return a * (1 - t) + b * t;
 	}
 
 };
