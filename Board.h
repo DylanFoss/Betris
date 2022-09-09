@@ -14,6 +14,9 @@ public:
 	int x, y;
 	int cellSize;
 
+	//temp flags for line clear animations
+	float timer;
+
 	Board();
 	Board(const Renderer* renderer, int boardWidth, int boardHeight, int cellSize, int x, int y);
 	Board(const Board& board);
@@ -25,6 +28,9 @@ public:
 	void ClearLines(int gridY, int numLines);
 	void ClearLines(const std::vector<int> &linesToClear);
 
+	//Drawing
+
 	void Draw();
+	void Draw(const std::vector<int> &linesToClear, const double dt);
 };
 

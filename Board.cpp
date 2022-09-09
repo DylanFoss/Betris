@@ -1,4 +1,5 @@
 #include "Board.h"
+#include <algorithm>
 
 Board::Board()
 {
@@ -9,12 +10,14 @@ Board::Board()
 	x = 0;
 	y = 0;
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
+	timer = 0;
 }
 
 Board::Board(const Renderer* renderer, int boardWidth, int boardHeight, int cellSize, int x, int y)
 	: renderer(renderer), boardWidth(boardWidth), boardHeight(boardHeight), cellSize(cellSize), x(x), y(y)
 {
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
+	timer = 0;
 }
 
 Board::Board(const Board& board)
@@ -97,33 +100,92 @@ void Board::Draw()
 				/* renderer.drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 80, 60) */ ;
 			if (grid.at(i).at(j) == 0) {}
 			else if (grid.at(i).at(j) == 1)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 255 - 90);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 255 - 90);
 			else if (grid.at(i).at(j) == 2)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 150 - 90, 200 - 90);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 150 - 90, 200 - 90);
 			else if (grid.at(i).at(j) == 3)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 165 - 90, 0);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 165 - 90, 0);
 			else if (grid.at(i).at(j) == 4)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 0);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 0);
 			else if (grid.at(i).at(j) == 5)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 40);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 40);
 			else if (grid.at(i).at(j) == 6)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 0);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 0);
 			else if (grid.at(i).at(j) == 7)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 255 - 90);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 255 - 90);
 			else if (grid.at(i).at(j) == 8)
-				renderer->drawSquare(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255-90, 255 - 90, 255 - 90);
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255-90, 255 - 90, 255 - 90);
 		}
+
+
+	timer = 0;
 
 	//draw border
 	for (int i = 0; i < boardHeight; i++)
 	{
-		renderer->drawSquare(cellSize, x-cellSize, y+i*cellSize, 0, 80, 60);
-		renderer->drawSquare(cellSize, x + boardWidth*cellSize, y + i * cellSize, 0, 80, 60);
+		renderer->drawMino(cellSize, x-cellSize, y+i*cellSize, 0, 80, 60);
+		renderer->drawMino(cellSize, x + boardWidth*cellSize, y + i * cellSize, 0, 80, 60);
 	}
 
 	for (int i = 0; i < boardWidth+2; i++)
 	{
-		renderer->drawSquare(cellSize, (x - cellSize) + i*cellSize, y - cellSize, 0, 80, 60);
+		renderer->drawMino(cellSize, (x - cellSize) + i*cellSize, y - cellSize, 0, 80, 60);
+	}
+}
+
+void Board::Draw(const std::vector<int>& linesToClear, const double dt)
+{
+
+	if (renderer == nullptr)
+	{
+		printf("ERROR: Draw call attempted on object with no known renderer.");
+		return;
+	}
+
+	timer += dt;
+	printf("%f", timer);
+
+	//draw grid
+
+	for (int i = 0; i < boardHeight; i++)
+	{
+		bool name = false;
+		for (int line : linesToClear) if (i == line) name = true;
+
+		for (int j = 0; j < boardWidth; j++)
+		{
+			if (name)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255-90, 255 - 90, 255 - 90, renderer->lerp(255,0, std::min(1.0f,timer/0.5f)));
+			else if (grid.at(i).at(j) == 0) {}
+			else if (grid.at(i).at(j) == 1)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 255 - 90);
+			else if (grid.at(i).at(j) == 2)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 150 - 90, 200 - 90);
+			else if (grid.at(i).at(j) == 3)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 165 - 90, 0);
+			else if (grid.at(i).at(j) == 4)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 0);
+			else if (grid.at(i).at(j) == 5)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 0, 255 - 90, 40);
+			else if (grid.at(i).at(j) == 6)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 0);
+			else if (grid.at(i).at(j) == 7)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 0, 255 - 90);
+			else if (grid.at(i).at(j) == 8)
+				renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90);
+		}
+	}
+
+	//draw border
+	for (int i = 0; i < boardHeight; i++)
+	{
+		renderer->drawMino(cellSize, x - cellSize, y + i * cellSize, 0, 80, 60);
+		renderer->drawMino(cellSize, x + boardWidth * cellSize, y + i * cellSize, 0, 80, 60);
+	}
+
+	for (int i = 0; i < boardWidth + 2; i++)
+	{
+		renderer->drawMino(cellSize, (x - cellSize) + i * cellSize, y - cellSize, 0, 80, 60);
 	}
 }
 
