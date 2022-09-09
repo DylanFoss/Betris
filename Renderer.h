@@ -47,23 +47,23 @@ public:
 		glEnd();
 	}
 
-	void drawSquare(int cellSize, int x, int y, int r, int g, int b) const
+	void drawSquare(int cellSize, int x, int y, int r, int g, int b , int a = 255) const
 	{
 		for (int i = 0; i < cellSize; i++)
 		{
 			for (int j = 0; j < cellSize; j++)
 			{
 				if (i == 0 && (j == 0 || j == cellSize - 1)) 
-					pixel(x + (j), y + (i), std::max(r - 30, 0), std::max(g - 30, 0) , std::max(b - 30, 0));
+					pixel(x + (j), y + (i), std::max(r - 30, 0), std::max(g - 30, 0) , std::max(b - 30, 0), a);
 				else if (i == cellSize - 1 && (j == 0 || j == cellSize - 1)) 
-					pixel(x + (j), y + (i), std::min(r + 20, 255), std::min(g + 20, 255), std::min(b + 20, 255));
+					pixel(x + (j), y + (i), std::min(r + 20, 255), std::min(g + 20, 255), std::min(b + 20, 255), a);
 				else if (j == 0 || j == cellSize - 1) 
-					pixel(x + (j), y + (i), std::max(r - 20, 0), std::max(g - 20, 0), std::max(b - 20, 0));		// side lines
+					pixel(x + (j), y + (i), std::max(r - 20, 0), std::max(g - 20, 0), std::max(b - 20, 0), a);		// side lines
 				else if (i == 0)
-					pixel(x + (j), y + (i), std::max(r - 40, 0), std::max(g - 40, 0), std::max(b - 40, 0));							// bottom line
+					pixel(x + (j), y + (i), std::max(r - 40, 0), std::max(g - 40, 0), std::max(b - 40, 0), a);							// bottom line
 				else if (i == cellSize - 1) 
-					pixel(x + (j), y + (i), std::min(r + 60, 255), std::min(g + 60, 255), std::min(b + 60, 255));					// top line
-				else pixel(x + (j), y + (i), r, g, b);
+					pixel(x + (j), y + (i), std::min(r + 60, 255), std::min(g + 60, 255), std::min(b + 60, 255), a);					// top line
+				else pixel(x + (j), y + (i), r, g, b, a);
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	float lerp(float a, float b, float t)
+	float lerp(float a, float b, float t) const
 	{
 		return a * (1 - t) + b * t;
 	}

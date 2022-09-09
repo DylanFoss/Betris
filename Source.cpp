@@ -31,7 +31,9 @@
 
 typedef struct
 {
-	int fr1, fr2;           //frame 1 frame 2, to create constant frame rate
+	//int fr1, fr2;           //frame 1 frame 2, to create constant frame rate
+	std::chrono::time_point < std::chrono::high_resolution_clock> fr1, fr2;
+
 }t; t T;
 
 //typedef struct
@@ -66,42 +68,11 @@ Game game = Game(&renderer, &input);
 
 void KeysDown(unsigned char key, int x, int y)
 {
-	//if (key == 'w' == 1) { K.w = 1; }
-	//if (key == 's' == 1) { K.s = 1; }
-	//if (key == 'a' == 1) { K.a = 1; }
-	//if (key == 'd' == 1) { K.d = 1; }
-
-	//if (key == 'q' == 1) { K.q = 1; }
-	//if (key == 'e' == 1) { K.e = 1; }
-
-	//if (key == 32 == 1) { K.e = 1; }
-
 	input.KeysDown(key, x, y);
 }
 void KeysUp(unsigned char key, int x, int y)
 {
-	//if (key == 'w' == 1) { K.w = 0; }
-	//if (key == 's' == 1) { K.s = 0; }
-	//if (key == 'a' == 1) { K.a = 0; }
-	//if (key == 'd' == 1) { K.d = 0; }
-
-	//if (key == 'q' == 1) { K.q = 0; }
-	//if (key == 'e' == 1) { K.e = 0; }
-
-	//if (key == 32 == 1) { K.e = 1; }
-
 	input.KeysUp(key, x, y);
-}
-void KeysHeld()
-{
-	//K.wOld = K.w;
-	//K.aOld = K.a;
-	//K.sOld = K.s;
-	//K.dOld = K.d;
-
-	//K.qOld = K.q;
-	//K.eOld = K.e;
-
 }
 
 void display()
@@ -113,12 +84,13 @@ void display()
 
 	game.Update(delta);
 
+	std::chrono::duration<double> drawTime = T.fr1 - T.fr2;
 	//Draw
-	if (T.fr1 - T.fr2 >= 16.6f)                        //only draw 60 frames/second
+	if (drawTime.count() >= 0.01667f)                        //only draw 60 frames/second
 	{
 		renderer.clearBackground();
 
-		game.Draw();
+		game.Draw(drawTime.count());
 
 		T.fr2 = T.fr1;
 		glutSwapBuffers();
@@ -127,7 +99,7 @@ void display()
 
 	input.KeysHeld();
 
-	T.fr1 = glutGet(GLUT_ELAPSED_TIME);          //1000 Milliseconds per second
+	T.fr1 = t2;
 
 	glutPostRedisplay();
 }
@@ -135,6 +107,9 @@ void display()
 void init()
 {
 	t1 = std::chrono::high_resolution_clock::now();
+
+	T.fr1 = std::chrono::high_resolution_clock::now();
+	T.fr2 = std::chrono::high_resolution_clock::now();
 
 	game.Init();
 }
