@@ -47,7 +47,7 @@ public:
 		glEnd();
 	}
 
-	void drawMino(int cellSize, int x, int y, int r, int g, int b , int a = 255) const
+	void drawSquare(int cellSize, int x, int y, int r, int g, int b , int a = 255) const
 	{
 		for (int i = 0; i < cellSize; i++)
 		{
@@ -62,52 +62,6 @@ public:
 				else if (i == 0)
 					pixel(x + (j), y + (i), std::max(r - 40, 0), std::max(g - 40, 0), std::max(b - 40, 0), a);							// bottom line
 				else if (i == cellSize - 1) 
-					pixel(x + (j), y + (i), std::min(r + 60, 255), std::min(g + 60, 255), std::min(b + 60, 255), a);					// top line
-				else pixel(x + (j), y + (i), r, g, b, a);
-			}
-		}
-	}
-
-	void drawMino(int cellSize, int x, int y, MinoType type, int a = 255) const
-	{
-		int r, g, b;
-
-		if (type == MinoType::I) { r = 0; b = 255 - 90; g = 255 - 90; }
-		else if (type == MinoType::L) { r = 0; b = 150 - 90; g = 200 - 90; }
-		else if (type == MinoType::J) { r = 255 - 90; b = 165 - 90; g = 0; }
-		else if (type == MinoType::O) { r = 255-90; b = 255-90; g = 0; }
-		else if (type == MinoType::S) { r = 0; b = 255 - 90; g = 40; }
-		else if (type == MinoType::Z) { r = 255-90; b = 0; g = 0; }
-		else if (type == MinoType::T) { r = 255-90; b = 0; g = 255 - 90; }
-		else { r = 0; g = 0; b = 0; }
-			
-			//0, 255 - 90, 255 - 90
-
-			//0, 150 - 90, 200 - 90
-
-			//255 - 90, 165 - 90, 0);
-
-			//255 - 90, 255 - 90, 0);
-
-			//0, 255 - 90, 40);
-
-			//255 - 90, 0, 0);
-
-			//255 - 90, 0, 255 - 90
-
-		for (int i = 0; i < cellSize; i++)
-		{
-			for (int j = 0; j < cellSize; j++)
-			{
-				if (i == 0 && (j == 0 || j == cellSize - 1))
-					pixel(x + (j), y + (i), std::max(r - 30, 0), std::max(g - 30, 0), std::max(b - 30, 0), a);
-				else if (i == cellSize - 1 && (j == 0 || j == cellSize - 1))
-					pixel(x + (j), y + (i), std::min(r + 20, 255), std::min(g + 20, 255), std::min(b + 20, 255), a);
-				else if (j == 0 || j == cellSize - 1)
-					pixel(x + (j), y + (i), std::max(r - 20, 0), std::max(g - 20, 0), std::max(b - 20, 0), a);		// side lines
-				else if (i == 0)
-					pixel(x + (j), y + (i), std::max(r - 40, 0), std::max(g - 40, 0), std::max(b - 40, 0), a);							// bottom line
-				else if (i == cellSize - 1)
 					pixel(x + (j), y + (i), std::min(r + 60, 255), std::min(g + 60, 255), std::min(b + 60, 255), a);					// top line
 				else pixel(x + (j), y + (i), r, g, b, a);
 			}
