@@ -4,17 +4,6 @@
 #include "Renderer.h"
 #include "Board.h"
 
-enum class MinoType
-{
-	I,
-	L,
-	J,
-	O,
-	S,
-	Z,
-	T
-};
-
 class Tetromino
 {
 protected:

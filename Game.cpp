@@ -28,7 +28,7 @@ void Game::UpdateTetrominoes()
 
 int Game::GetNext()
 {
-	int returnVal = tetrominoBucket.top();
+	int returnVal = tetrominoBucket.front();
 	tetrominoBucket.pop();
 
 	if (tetrominoBucket.size() < 7)
@@ -40,8 +40,9 @@ int Game::GetNext()
 void Game::GenerateTetrominoes()
 {
 	int tetrominoes[7] = { 0,1,2,3,4,5,6 };
-
-	std::shuffle(std::begin(tetrominoes), std::end(tetrominoes), std::default_random_engine());
+	std::random_device rd;
+	unsigned seed = rd();
+	std::shuffle(std::begin(tetrominoes), std::end(tetrominoes), std::default_random_engine(seed));
 
 	for (int type : tetrominoes)
 		tetrominoBucket.push(type); 
@@ -167,7 +168,7 @@ void Game::Update(const double dt)
 			break;
 		case (GameState::CLEARLINE):
 
-			if (lineClearWait < 0.5f)
+			if (lineClearWait < 0.6f)
 			{
 				lineClearWait += dt;
 			}

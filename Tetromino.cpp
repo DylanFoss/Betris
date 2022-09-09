@@ -396,22 +396,22 @@ void Tetromino::Reset(MinoType type, int x, int y)
 	this->y = y;
 }
 
-// returns the Y relative to the gird based on the first non-0 value in the tiles matrix. Used for line detection.
-int Tetromino::GetBoardY()
-{
-	if (board == nullptr)
-	{
-		std::cout << "No board assigned to tetromino, cannot retrive board Y" << '\n';
-		return 0;
-	}
-
-	for (int Y = 0; Y < 4; Y++)
-		for (int X = 0; X < 4; X++)
-			if (tiles[Y][X] != 0)
-				return board->GetGridY(y + Y);
-
-	return 0;
-}
+//// returns the Y relative to the gird based on the first non-0 value in the tiles matrix. Used for line detection.
+//int Tetromino::GetBoardY()
+//{
+//	if (board == nullptr)
+//	{
+//		std::cout << "No board assigned to tetromino, cannot retrive board Y" << '\n';
+//		return 0;
+//	}
+//
+//	for (int Y = 0; Y < 4; Y++)
+//		for (int X = 0; X < 4; X++)
+//			if (tiles[Y][X] != 0)
+//				return board->GetGridY(y + Y);
+//
+//	return 0;
+//}
 
 void Tetromino::Draw()
 {
@@ -419,20 +419,7 @@ void Tetromino::Draw()
 		for (int j = 0; j < 4; j++)
 		{
 			if (tiles[i][j] == 0) {}
-			else if (tiles[i][j] == 1)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 255 - 90);
-			else if (tiles[i][j] == 2)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 150 - 90, 200 - 90);
-			else if (tiles[i][j] == 3)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 165-90, 0);
-			else if (tiles[i][j] == 4)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 255-90, 0);
-			else if (tiles[i][j] == 5)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 40);
-			else if (tiles[i][j] == 6)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 0);
-			else if (tiles[i][j] == 7)
-				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 255 - 90);
+			else renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), static_cast<MinoType>(tiles[i][j] - 1), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
 		}
 }
 

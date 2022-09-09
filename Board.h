@@ -5,6 +5,9 @@ class Board
 {
 private:
 	const Renderer* renderer;
+	void DrawBorder() const;
+	void DrawGridMino(const int i, const int j) const;
+	void AnimateClearedMino(int i, int j);
 
 public:
 
@@ -13,9 +16,6 @@ public:
 
 	int x, y;
 	int cellSize;
-
-	//temp flags for line clear animations
-	float timer;
 
 	Board();
 	Board(const Renderer* renderer, int boardWidth, int boardHeight, int cellSize, int x, int y);
@@ -26,9 +26,14 @@ public:
 	int GetGridY(int y) const;
 
 	void ClearLines(int gridY, int numLines);
-	void ClearLines(const std::vector<int> &linesToClear);
+	void ClearLines(const std::vector<int>& linesToClear);
+
+	void GenerateLineClearAnimation();
 
 	//Drawing
+
+	//temp flags for line clear animations
+	float timer;
 
 	void Draw();
 	void Draw(const std::vector<int> &linesToClear, const double dt);

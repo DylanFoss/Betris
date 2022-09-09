@@ -3,6 +3,7 @@
 #include <array>
 #include <vector>
 #include <stack>
+#include <queue>
 #include <algorithm>
 #include <random>
 
@@ -38,7 +39,7 @@ private:
 	Tetromino queue2;
 	Tetromino queue3;
 
-	std::stack<int> tetrominoBucket;
+	std::queue<int> tetrominoBucket;
 	int bucketCounter;
 
 	//logic
@@ -66,5 +67,7 @@ public:
 	void Init();
 	void Update(const double deltaTime);
 	void Draw(const double deltaTime);
+
+	const std::vector<int>& GetLinesToClear() const { return linesToClear; };
 };
 
