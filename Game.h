@@ -13,12 +13,20 @@
 #include "Tetromino.h"
 #include "GhostPiece.h"
 
+enum class GameState
+{
+	PLAYPHASE,
+	CLEARLINE
+};
+
 class Game
 {
 private:
 
 	const Renderer* renderer;
 	InputManager* input;
+
+	GameState state;
 
 	Board board;
 	Tetromino currentTetromino;
@@ -35,9 +43,14 @@ private:
 
 	//logic
 	bool gameOver;
+	bool IsMinoHeld;
+	float stepCounter;
 
-	float logicCounter;
-	float lastPressed;
+	bool tetrominoUpdate;
+
+	//line clearing
+	std::vector<int> linesToClear;
+	float lineClearWait;
 
 public:
 
@@ -52,6 +65,6 @@ public:
 
 	void Init();
 	void Update(const double deltaTime);
-	void Draw();
+	void Draw(const double deltaTime);
 };
 

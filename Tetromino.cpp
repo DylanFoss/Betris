@@ -2,12 +2,12 @@
 #include <iostream>
 
 Tetromino::Tetromino()
-	: renderer(nullptr), board(nullptr), x(0), y(0), type(Type::I), rotation(0)
+	: renderer(nullptr), board(nullptr), x(0), y(0), type(MinoType::I), rotation(0)
 {
 	ChangeType(type);
 }
 
-Tetromino::Tetromino(const Renderer* renderer, Board* board, int X = 0, int Y = 0, Type type = Type::I)
+Tetromino::Tetromino(const Renderer* renderer, Board* board, int X = 0, int Y = 0, MinoType type = MinoType::I)
 	: renderer(renderer), board(board), x(X), y(Y), type(type), rotation(0)
 {
 	ChangeType(type);
@@ -35,13 +35,13 @@ Tetromino& Tetromino::operator=(const Tetromino& other)
 	return *this;
 }
 
-void Tetromino::ChangeType(Type type)
+void Tetromino::ChangeType(MinoType type)
 {
 	std::memset(tiles, 0, sizeof(tiles));
 
 	switch (type)
 	{
-	case Type::I:
+	case MinoType::I:
 
 		tiles[2][0] = 1;
 		tiles[2][1] = 1;
@@ -49,7 +49,7 @@ void Tetromino::ChangeType(Type type)
 		tiles[2][3] = 1;
 
 		break;
-	case Type::L:
+	case MinoType::L:
 
 		tiles[1][0] = 2;
 		tiles[1][1] = 2;
@@ -57,33 +57,33 @@ void Tetromino::ChangeType(Type type)
 		tiles[2][2] = 2;
 
 		break;
-	case Type::J:
+	case MinoType::J:
 
 		tiles[1][0] = 3;
 		tiles[1][1] = 3;
 		tiles[1][2] = 3;
 		tiles[2][0] = 3;
 		break;
-	case Type::O:
+	case MinoType::O:
 
 		tiles[1][2] = 4;
 		tiles[1][1] = 4;
 		tiles[2][2] = 4;
 		tiles[2][1] = 4;
 		break;
-	case Type::S:
+	case MinoType::S:
 		tiles[2][1] = 5;
 		tiles[2][2] = 5;
 		tiles[1][0] = 5;
 		tiles[1][1] = 5;
 		break;
-	case Type::Z:
+	case MinoType::Z:
 		tiles[2][0] = 6;
 		tiles[2][1] = 6;
 		tiles[1][1] = 6;
 		tiles[1][2] = 6;
 		break;
-	case Type::T:
+	case MinoType::T:
 
 		tiles[1][0] = 7;
 		tiles[1][1] = 7;
@@ -133,7 +133,7 @@ void Tetromino::Move(int X, int Y)
 
 void Tetromino::Rotate(bool lr)
 {
-	if (type == Type::O) return;
+	if (type == MinoType::O) return;
 
 	unsigned char ret[4][4] = { 0 };
 
@@ -168,7 +168,7 @@ void Tetromino::Rotate(bool lr)
 
 	switch (type)
 	{
-		case Type::I:
+		case MinoType::I:
 
 			//no offsets for basic rotation...
 
@@ -240,11 +240,11 @@ void Tetromino::Rotate(bool lr)
 			else return;
 
 			break;
-		case Type::L:
-		case Type::J:
-		case Type::S:
-		case Type::Z:
-		case Type::T:
+		case MinoType::L:
+		case MinoType::J:
+		case MinoType::S:
+		case MinoType::Z:
+		case MinoType::T:
 
 			// initial rotation
 			if (!lr)
@@ -380,12 +380,12 @@ void Tetromino::Reset()
 	Reset(type, x, y);
 }
 
-void Tetromino::Reset(Type newType)
+void Tetromino::Reset(MinoType newType)
 {
 	Reset(newType, x, y);
 }
 
-void Tetromino::Reset(Type type, int x, int y)
+void Tetromino::Reset(MinoType type, int x, int y)
 {
 	this->type = type;
 	rotation = 0;
@@ -409,6 +409,8 @@ int Tetromino::GetBoardY()
 		for (int X = 0; X < 4; X++)
 			if (tiles[Y][X] != 0)
 				return board->GetGridY(y + Y);
+
+	return 0;
 }
 
 void Tetromino::Draw()
@@ -418,19 +420,19 @@ void Tetromino::Draw()
 		{
 			if (tiles[i][j] == 0) {}
 			else if (tiles[i][j] == 1)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 255 - 90);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 255 - 90);
 			else if (tiles[i][j] == 2)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 150 - 90, 200 - 90);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 150 - 90, 200 - 90);
 			else if (tiles[i][j] == 3)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 165-90, 0);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 165-90, 0);
 			else if (tiles[i][j] == 4)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 255-90, 0);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255-90, 255-90, 0);
 			else if (tiles[i][j] == 5)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 40);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 0, 255 - 90, 40);
 			else if (tiles[i][j] == 6)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 0);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 0);
 			else if (tiles[i][j] == 7)
-				renderer->drawSquare(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 255 - 90);
+				renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), 255 - 90, 0, 255 - 90);
 		}
 }
 

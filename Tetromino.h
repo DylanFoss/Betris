@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Board.h"
 
-enum class Type
+enum class MinoType
 {
 	I,
 	L,
@@ -19,13 +19,13 @@ class Tetromino
 {
 protected:
 
-	Type type;
+	MinoType type;
 	Board* board;
 	const Renderer* renderer;
 
 public:
 
-	Type getType() const { return type; }
+	MinoType getType() const { return type; }
 
 	int GetBoardY();
 
@@ -34,11 +34,11 @@ public:
 	unsigned char tiles[4][4];
 
 	Tetromino();
-	Tetromino(const Renderer* renderer, Board* board, int X, int Y, Type type);
+	Tetromino(const Renderer* renderer, Board* board, int X, int Y, MinoType type);
 	Tetromino(const Tetromino& other);
 	Tetromino& operator=(const Tetromino& other);
 
-	void ChangeType(Type type);
+	void ChangeType(MinoType type);
 
 	void Move(int X, int Y);
 	void Rotate(bool lr);
@@ -48,8 +48,8 @@ public:
 	void Lock();
 
 	void Reset();
-	void Reset(Type type);
-	void Reset(Type type, int x, int y);
+	void Reset(MinoType type);
+	void Reset(MinoType type, int x, int y);
 
 	void Draw();
 
