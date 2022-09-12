@@ -156,6 +156,7 @@ void Game::Update(const double dt)
 						if (linesToClear.size() != 0)
 						{
 							state = GameState::CLEARLINE;
+							board.GenerateLineClearAnimation();
 							printf("Number of Lines: %d\n", linesToClear.size());
 						}
 

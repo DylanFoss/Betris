@@ -1,6 +1,7 @@
 #pragma once
 #include "Renderer.h"
 #include <vector>
+
 class Board
 {
 private:
@@ -34,6 +35,8 @@ public:
 
 	//temp flags for line clear animations
 	float timer;
+	int animationType;
+	bool isFadeIn;
 
 	void Draw();
 	void Draw(const std::vector<int> &linesToClear, const double dt);

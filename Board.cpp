@@ -1,5 +1,6 @@
 #include "Board.h"
 #include <algorithm>
+#include <random>
 
 Board::Board()
 {
@@ -160,12 +161,39 @@ void Board::DrawGridMino(const int i, const int j) const
 
 void Board::AnimateClearedMino(int i, int j)
 {
-	//renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(0.1f , 0.6f, j/(float)boardWidth))));
-	//renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(0.1f , 0.6f, std::abs(j-boardWidth/2)/(float)boardWidth))));
-	renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(0.1f, 0.6f, std::abs((j % 6) - boardWidth / 2) / (float)boardWidth))));
+	float a = 0.1f;
+	float b = 0.6f;
+
+	if (isFadeIn)
+		std::swap(a, b);
+
+	switch (animationType)
+	{
+		case (0):
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, j / (float)boardWidth))));
+			break;
+
+		case (1):
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs(j - boardWidth / 2) / (float)boardWidth))));
+			break;
+
+		case (2):
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs((j % boardWidth / 2) - boardWidth / 2) / (float)boardWidth))));
+			break;
+
+	}
+
+	//renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs((j % 3) - boardWidth / 4) / (float)boardWidth))));
 }
 
 void Board::GenerateLineClearAnimation()
 {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<> dist(0, 2);
 
+	animationType = dist(mt);
+
+	std::uniform_int_distribution<> swag(0, 2);
+	isFadeIn = (bool)swag(mt);
 }
