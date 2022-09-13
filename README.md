@@ -4,7 +4,7 @@ An in-progress OpengGL implementation of Tetris. Simply done to see if I could.
 
 ## FEATURES:
 
-- Uses SRS (standard rotation system) to solve roatations in complience with the standard tetris rule sets.
+- Uses SRS (standard rotation system) to solve roatations in complience with the standard tetris rule sets. T-spin to win.
 - Basic scoring.
 - Holding pieces, seeing your next pieces and and outline of where your current piece will land
 
