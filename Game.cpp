@@ -10,11 +10,16 @@ Game::Game(const Renderer* renderer, InputManager* input)
 	state = GameState::PLAYPHASE;
 
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
+
 	currentTetromino = Tetromino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
 	ghostPiece = GhostPiece(currentTetromino);
 	queue1 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 14 * cellSize + cellSize, MinoType::I);
 	queue2 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 11 * cellSize + cellSize, MinoType::I);
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
+
+	Next = Font("res/fonts/pressStart2P.ttf", "Next", 14, 255, 255, 255, 255, 650, 550);
+	Score = Font("res/fonts/pressStart2P.ttf", "Score", 14, 255, 255, 255, 255, 50, 200);
+	Held = Font("res/fonts/pressStart2P.ttf", "Hold", 14, 255, 255, 255, 255, 50, 550);
 
 }
 
@@ -104,6 +109,10 @@ void Game::Init()
 	stepCounter = 0;
 	lineClearWait = 0;
 	tetrominoUpdate = false;
+
+	Next.Init();
+	Score.Init();
+	Held.Init();
 }
 
 void Game::Update(const double dt)
@@ -206,4 +215,8 @@ void Game::Draw(const double dt)
 			queue3.Draw();
 			break;
 	}
+
+	Next.Draw();
+	Score.Draw();
+	Held.Draw();
 }

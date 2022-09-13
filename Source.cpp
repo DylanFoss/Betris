@@ -16,7 +16,9 @@
 #include "Tetromino.h"
 #include "Board.h"
 
-#define res			1				//0=160x120 1=360x240 4=640x480
+#include "Font.h"
+
+#define res			1						//0=160x120 1=360x240 4=640x480
 #define SW         197*res                  //screen width
 #define SH         160*res                  //screen height
 #define SW2        (SW/2)                   //half of screen width
@@ -31,26 +33,9 @@
 
 typedef struct
 {
-	//int fr1, fr2;           //frame 1 frame 2, to create constant frame rate
 	std::chrono::time_point < std::chrono::high_resolution_clock> fr1, fr2;
 
 }t; t T;
-
-//typedef struct
-//{
-//	int w, s, a, d;           
-//	int wOld, aOld, sOld, dOld;
-//
-//	int q, e;
-//	int qOld, eOld;
-//
-//	int space;
-//	int spaceOld;
-//}keys; keys K;
-
-//unsigned char boardWidth = 12;
-//unsigned char boardHeight = 18;
-//unsigned char cellSize = 7;
 
 std::chrono::time_point < std::chrono::high_resolution_clock> t1;
 
@@ -92,6 +77,9 @@ void display()
 
 		game.Draw(drawTime.count());
 
+		//renderer.drawText(600, 600, 255, 255, 255, "Next:");
+		//test.Draw();
+
 		T.fr2 = T.fr1;
 		glutSwapBuffers();
 		glutReshapeWindow(GLSW, GLSH);             //prevent window scaling
@@ -107,13 +95,13 @@ void display()
 void init()
 {
 	t1 = std::chrono::high_resolution_clock::now();
-
 	T.fr1 = std::chrono::high_resolution_clock::now();
 	T.fr2 = std::chrono::high_resolution_clock::now();
 
 	game.Init();
-}
 
+	//test.Init("res/fonts/pressStart2P.ttf", 18);
+}
 
 int main(int argc, char* argv[])
 {

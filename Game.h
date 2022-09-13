@@ -13,6 +13,7 @@
 #include "Board.h"
 #include "Tetromino.h"
 #include "GhostPiece.h"
+#include "Font.h"
 
 enum class GameState
 {
@@ -38,6 +39,10 @@ private:
 	Tetromino queue1;
 	Tetromino queue2;
 	Tetromino queue3;
+
+	Font Next;
+	Font Score;
+	Font Held;
 
 	std::queue<int> tetrominoBucket;
 	int bucketCounter;
