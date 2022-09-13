@@ -49,10 +49,13 @@ private:
 
 	//logic
 	bool gameOver;
-	bool IsMinoHeld;
-	float stepCounter;
 
+	float stepCounter;
 	bool tetrominoUpdate;
+
+	//swap/holding
+	bool IsMinoHeld;
+	bool IsHoldOnCooldown;
 
 	//line clearing
 	std::vector<int> linesToClear;
@@ -65,9 +68,11 @@ public:
 	void UpdateTetrominoes();
 	int GetNext();
 	void GenerateTetrominoes();
+	void ApplyOffset(Tetromino& mino);
 
 	void MoveTetromino(const double dt);
 	void RotateTetromino();
+	void SwapTetromino();
 
 	void Init();
 	void Update(const double deltaTime);

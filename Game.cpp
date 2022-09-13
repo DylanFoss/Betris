@@ -16,6 +16,7 @@ Game::Game(const Renderer* renderer, InputManager* input)
 	queue1 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 14 * cellSize + cellSize, MinoType::I);
 	queue2 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 11 * cellSize + cellSize, MinoType::I);
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
+	heldTetromino = Tetromino(renderer, &board, board.x - 6 * cellSize, board.y + 14 * cellSize, MinoType::I);
 
 	Next = Font("res/fonts/pressStart2P.ttf", "Next", 14, 255, 255, 255, 255, 650, 550);
 	Score = Font("res/fonts/pressStart2P.ttf", "Score", 14, 255, 255, 255, 255, 50, 200);
@@ -26,9 +27,29 @@ Game::Game(const Renderer* renderer, InputManager* input)
 void Game::UpdateTetrominoes()
 {
 	currentTetromino.Reset(static_cast<MinoType>(queue1.getType()), board.x + 5 * cellSize, board.y + 15 * cellSize);
-	queue1.Reset(static_cast<MinoType>(queue2.getType()));
-	queue2.Reset(static_cast<MinoType>(queue3.getType()));
-	queue3.Reset(static_cast<MinoType>(GetNext()));
+	queue1.Reset(static_cast<MinoType>(queue2.getType()), board.x + 15 * cellSize, board.y + 14 * cellSize);
+	queue2.Reset(static_cast<MinoType>(queue3.getType()), board.x + 15 * cellSize, board.y + 9 * cellSize);
+	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4 * cellSize);
+
+	ApplyOffset(queue1);
+	ApplyOffset(queue2);
+	ApplyOffset(queue3);
+}
+
+// for the side bars, apply offsets to pieces to make them look centered 
+//TODO: employ a more programatic implementation
+void Game::ApplyOffset(Tetromino& mino)
+{
+	switch (mino.getType())
+	{
+		case (MinoType::I):
+			mino.x -= cellSize/2;
+			mino.y -= 3;
+			break;
+		case (MinoType::O):
+			mino.x -= 3;
+			break;
+	}
 }
 
 int Game::GetNext()
@@ -84,12 +105,40 @@ void Game::MoveTetromino(const double dt)
 
 	}
 }
+
 void Game::RotateTetromino()
 {
 	int x = 0, y = 0;
 
 	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) currentTetromino.Rotate(true);
 	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) currentTetromino.Rotate(false);
+}
+
+void Game::SwapTetromino()
+{
+	if (input->IsKeyPressed('c') || input->IsKeyPressed('C'))
+	{
+		if (!IsHoldOnCooldown)
+		{
+			if (IsMinoHeld)
+			{
+				MinoType temp = currentTetromino.getType();
+				currentTetromino.Reset(heldTetromino.getType(), board.x + 5 * cellSize, board.y + 15 * cellSize);
+				heldTetromino.Reset(temp, board.x - 6 * cellSize, board.y + 14 * cellSize);
+
+				IsHoldOnCooldown = true;
+			}
+			else
+			{
+				heldTetromino.Reset(currentTetromino.getType());
+
+				tetrominoUpdate = true;
+				IsMinoHeld = true;
+			}
+			ApplyOffset(heldTetromino);
+			stepCounter = 0;
+		}
+	}
 }
 
 
@@ -99,16 +148,25 @@ void Game::Init()
 		GenerateTetrominoes();
 
 	currentTetromino.Reset(static_cast<MinoType>(GetNext()), board.x + 5 * cellSize, board.y + 15 * cellSize);
-	ghostPiece.UpdatePosition(currentTetromino);
 	queue1.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 14 * cellSize);
 	queue2.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 9 * cellSize);
 	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4  * cellSize);
+
+	ApplyOffset(queue1);
+	ApplyOffset(queue2);
+	ApplyOffset(queue3);
+
+	ghostPiece.UpdatePosition(currentTetromino);
+	heldTetromino.Reset(MinoType::I, board.x - 6 * cellSize, board.y + 14 * cellSize);
 
 	gameOver = false;
 
 	stepCounter = 0;
 	lineClearWait = 0;
 	tetrominoUpdate = false;
+
+	IsMinoHeld = 0;
+	IsHoldOnCooldown = 0;
 
 	Next.Init();
 	Score.Init();
@@ -133,6 +191,7 @@ void Game::Update(const double dt)
 						gameOver = true;
 				}
 
+				SwapTetromino();
 				MoveTetromino(dt);
 				RotateTetromino();
 				ghostPiece.UpdatePosition(currentTetromino);
@@ -170,6 +229,7 @@ void Game::Update(const double dt)
 						}
 
 						tetrominoUpdate = true;
+						IsHoldOnCooldown = false;
 
 					}
 					stepCounter = 0;
@@ -215,6 +275,8 @@ void Game::Draw(const double dt)
 			queue3.Draw();
 			break;
 	}
+
+	if(IsMinoHeld) heldTetromino.Draw();
 
 	Next.Draw();
 	Score.Draw();
