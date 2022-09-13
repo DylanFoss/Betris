@@ -150,6 +150,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GhostPiece.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="ScoreCalculator.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TextRenderer.cpp" />
@@ -161,6 +163,8 @@
     <ClInclude Include="GhostPiece.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="ScoreCalculator.h" />
     <ClInclude Include="Tetromino.h" />
     <ClInclude Include="TextRenderer.h" />
   </ItemGroup>

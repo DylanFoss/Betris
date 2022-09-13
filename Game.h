@@ -10,6 +10,9 @@
 #include "Renderer.h"
 #include "InputManager.h"
 
+#include "Score.h"
+#include "ScoreCalculator.h"
+
 #include "Board.h"
 #include "Tetromino.h"
 #include "GhostPiece.h"
@@ -30,6 +33,9 @@ private:
 
 	GameState state;
 
+	Score scoreTracker;
+	ScoreCalculator scoreCalc;
+
 	Board board;
 	Tetromino currentTetromino;
 	GhostPiece ghostPiece;
@@ -40,9 +46,10 @@ private:
 	Tetromino queue2;
 	Tetromino queue3;
 
-	Font Next;
-	Font Score;
-	Font Held;
+	Font nextTitle;
+	Font scoreTitle;
+	Font heldTitle;
+	Font score;
 
 	std::queue<int> tetrominoBucket;
 	int bucketCounter;

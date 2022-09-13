@@ -9,6 +9,9 @@ Game::Game(const Renderer* renderer, InputManager* input)
 {
 	state = GameState::PLAYPHASE;
 
+	scoreTracker = Score();
+	scoreCalc = ScoreCalculator(&scoreTracker);
+
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
 
 	currentTetromino = Tetromino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
@@ -18,9 +21,10 @@ Game::Game(const Renderer* renderer, InputManager* input)
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
 	heldTetromino = Tetromino(renderer, &board, board.x - 6 * cellSize, board.y + 14 * cellSize, MinoType::I);
 
-	Next = Font("res/fonts/pressStart2P.ttf", "Next", 14, 255, 255, 255, 255, 650, 550);
-	Score = Font("res/fonts/pressStart2P.ttf", "Score", 14, 255, 255, 255, 255, 50, 200);
-	Held = Font("res/fonts/pressStart2P.ttf", "Hold", 14, 255, 255, 255, 255, 50, 550);
+	nextTitle = Font("res/fonts/pressStart2P.ttf", "Next", 14, 255, 255, 255, 255, 650, 550);
+	scoreTitle = Font("res/fonts/pressStart2P.ttf", "Score", 14, 255, 255, 255, 255, 50, 200);
+	score = Font("res/fonts/pressStart2P.ttf", "0", 14, 255, 255, 255, 255, 90, 150);
+	heldTitle = Font("res/fonts/pressStart2P.ttf", "Hold", 14, 255, 255, 255, 255, 50, 550);
 
 }
 
@@ -83,13 +87,19 @@ void Game::MoveTetromino(const double dt)
 
 	if (input->IsKeyPressed(32))
 	{
-		while (currentTetromino.Advance());
+		while (currentTetromino.Advance())
+		{
+			scoreCalc.IncrementHardDropCounter();
+		};
 		stepCounter = 1000;
 	}
 	else if (input->IsKeyPressedRepeatable('s', dt) || input->IsKeyPressedRepeatable('S', dt))
 	{
 		if (!currentTetromino.CollisionCheck(currentTetromino.x, currentTetromino.y - cellSize))
+		{
 			stepCounter = 1000;
+			scoreCalc.IncrementSoftDropCounter();
+		}
 	}
 
 	if (x != 0 || y != 0)
@@ -144,6 +154,9 @@ void Game::SwapTetromino()
 
 void Game::Init()
 {
+	scoreTracker = Score();
+	scoreCalc = ScoreCalculator(&scoreTracker);
+
 	for (int i = 0; i < 2; i++)
 		GenerateTetrominoes();
 
@@ -168,9 +181,11 @@ void Game::Init()
 	IsMinoHeld = 0;
 	IsHoldOnCooldown = 0;
 
-	Next.Init();
-	Score.Init();
-	Held.Init();
+	nextTitle.Init();
+	scoreTitle.Init();
+	heldTitle.Init();
+	score.Init();
+
 }
 
 void Game::Update(const double dt)
@@ -184,7 +199,6 @@ void Game::Update(const double dt)
 				if (tetrominoUpdate)
 				{
 					UpdateTetrominoes();
-
 					tetrominoUpdate = false;
 
 					if (currentTetromino.CollisionCheck())
@@ -207,6 +221,8 @@ void Game::Update(const double dt)
 					{
 						currentTetromino.Lock();
 
+						scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
+
 						//check for lines
 						for (int y = 0; y < 4; y++)
 							if (board.GetGridY(currentTetromino.y) + y < board.boardHeight - 1 && board.GetGridY(currentTetromino.y) + y >= 0)
@@ -224,15 +240,23 @@ void Game::Update(const double dt)
 						if (linesToClear.size() != 0)
 						{
 							state = GameState::CLEARLINE;
+
 							board.GenerateLineClearAnimation();
 							printf("Number of Lines: %d\n", linesToClear.size());
 						}
+
+						scoreCalc.SetLinesCleared(linesToClear.size());
 
 						tetrominoUpdate = true;
 						IsHoldOnCooldown = false;
 
 					}
 					stepCounter = 0;
+
+					//TODO: clean up updating the score to be less messy (likely make an overlay class to handle offseting numeric strings)
+					scoreCalc.CalculateScore();
+					score.SetText(std::to_string(scoreTracker.GetScore()).c_str());
+					score.SetX(80 - 2 * score.GetText().size());
 				}
 			}
 			break;
@@ -278,7 +302,8 @@ void Game::Draw(const double dt)
 
 	if(IsMinoHeld) heldTetromino.Draw();
 
-	Next.Draw();
-	Score.Draw();
-	Held.Draw();
+	nextTitle.Draw();
+	scoreTitle.Draw();
+	score.Draw();
+	heldTitle.Draw();
 }

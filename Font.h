@@ -24,9 +24,13 @@ public:
 	void Draw();
 	void Init();
 
-	void SetText(const char* newText) { text = newText; };
-	void SetX(int newX) { x = newX; };
-	void SetY(int newY) { y = newY; };
+	void SetText(const char* newText) { text = newText; }
+	void SetX(int newX) { x = newX; }
+	void SetY(int newY) { y = newY; }
+
+	int GetX() const { return x; }
+	int GetY() const { return y; }
+	const std::string& GetText() const { return text; }
 
 };
 
