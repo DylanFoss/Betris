@@ -6,16 +6,16 @@ An in-progress OpengGL implementation of Tetris. Simply done to see if I could.
 
 - Uses SRS (standard rotation system) to solve roatations in complience with the standard tetris rule sets. T-spin to win.
 - Basic scoring.
-- Holding pieces, seeing your next pieces and and outline of where your current piece will land
+- Holding pieces, seeing your next pieces and and outline of where your current piece will land.
 
 ## UPCOMING FEATURES
 
 - Menus that allow the entering of the main game, as well as a reset screen whne the game ends.
-- add varying levels based on performance
-- Add full scoring system (T-spins, back-to-back difficult clears)
-- General polish (text centering, QoL)
-- Implementation of an audio
-- raytracing
+- Add varying levels based on performance.
+- Add full scoring system (T-spins, back-to-back difficult clears).
+- General polish (text centering, QoL).
+- Implementation of audio.
+- Raytracing.
 
 ## CONTROLS:
 
