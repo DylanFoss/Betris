@@ -10,12 +10,12 @@ An in-progress OpengGL implementation of Tetris. Simply done to see if I could.
 
 ## UPCOMING FEATURES
 
-- Menus that allow the entering of the main game, as well as a reset screen whne the game ends.
+- Menus that allow the entering of the main game, as well as a reset screen when the game ends.
 - Add varying levels based on performance.
 - Add full scoring system (T-spins, back-to-back difficult clears).
 - General polish (text centering, QoL).
 - Implementation of audio.
-- Raytracing.
+- Raytracing*.
 
 ## CONTROLS:
 
