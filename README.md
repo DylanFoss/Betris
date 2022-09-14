@@ -19,7 +19,7 @@ An in-progress OpengGL implementation of Tetris. Simply done to see if I could.
 
 ## CONTROLS:
 
-A and S to move piece left or right.
+A and D to move piece left or right.
 
 Q and E to rotate the piece left or right.
 
