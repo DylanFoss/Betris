@@ -24,8 +24,6 @@ private:
 	unsigned int screenHeight;
 	unsigned int screenWidth;
 
-	//textrenderer::font_data font;
-
 public:
 
 	Renderer(const unsigned int screenHeight, const unsigned int screenWidth, const unsigned int pixelScale)
@@ -43,23 +41,6 @@ public:
 		glEnd();
 	}
 
-	//void drawText(int x, int y, int r = 0, int g = 0, int b = 0, const char* string = "default")
-	//{
-	//	glPushMatrix();
-	//	glLoadIdentity();
-
-	//	// Blue text
-	//	glColor3ub(r, g, b);
-
-	//	textrenderer::print(font, x , y, string);
-
-	//	glPopMatrix();
-	//}
-
-	//void initFont(const char* dir, int size)
-	//{
-	//	font.init(dir, size);
-	//}
 
 	void drawMino(int cellSize, int x, int y, int r, int g, int b, int a = 255) const
 	{

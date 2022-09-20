@@ -342,16 +342,6 @@ void Tetromino::Rotate(bool lr)
 			tiles[i][j] = initial[i][j];
 		}
 	}
-
-
-	//// basic rotation checks
-	//while (WallCollision())
-	//{
-	//	if (x < board.x)
-	//		x += board.cellSize;
-	//	else
-	//		x -= board.cellSize;
-	//}
 }
 
 bool Tetromino::Advance()
@@ -395,23 +385,6 @@ void Tetromino::Reset(MinoType type, int x, int y)
 	this->x = x;
 	this->y = y;
 }
-
-//// returns the Y relative to the gird based on the first non-0 value in the tiles matrix. Used for line detection.
-//int Tetromino::GetBoardY()
-//{
-//	if (board == nullptr)
-//	{
-//		std::cout << "No board assigned to tetromino, cannot retrive board Y" << '\n';
-//		return 0;
-//	}
-//
-//	for (int Y = 0; Y < 4; Y++)
-//		for (int X = 0; X < 4; X++)
-//			if (tiles[Y][X] != 0)
-//				return board->GetGridY(y + Y);
-//
-//	return 0;
-//}
 
 void Tetromino::Draw()
 {

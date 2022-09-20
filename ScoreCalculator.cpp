@@ -62,8 +62,6 @@ void ScoreCalculator::CalculateScore()
 			roundScore += 50 * comboMultiplier * level;
 	}
 
-	//std::cout << "Score:" << roundScore << '\n';
-
 	scoreTracker->UpdateScore(roundScore, linesCleared);
 	SoftReset();
 }

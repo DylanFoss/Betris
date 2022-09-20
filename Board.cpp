@@ -182,8 +182,6 @@ void Board::AnimateClearedMino(int i, int j)
 			break;
 
 	}
-
-	//renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs((j % 3) - boardWidth / 4) / (float)boardWidth))));
 }
 
 void Board::GenerateLineClearAnimation()
@@ -194,6 +192,6 @@ void Board::GenerateLineClearAnimation()
 
 	animationType = dist(mt);
 
-	std::uniform_int_distribution<> swag(0, 2);
-	isFadeIn = (bool)swag(mt);
+	std::uniform_int_distribution<> temp(0, 2);
+	isFadeIn = (bool)temp(mt);
 }

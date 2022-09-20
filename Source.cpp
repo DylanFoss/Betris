@@ -77,9 +77,6 @@ void display()
 
 		game.Draw(drawTime.count());
 
-		//renderer.drawText(600, 600, 255, 255, 255, "Next:");
-		//test.Draw();
-
 		T.fr2 = T.fr1;
 		glutSwapBuffers();
 		glutReshapeWindow(GLSW, GLSH);             //prevent window scaling
@@ -99,8 +96,6 @@ void init()
 	T.fr2 = std::chrono::high_resolution_clock::now();
 
 	game.Init();
-
-	//test.Init("res/fonts/pressStart2P.ttf", 18);
 }
 
 int main(int argc, char* argv[])
