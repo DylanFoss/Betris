@@ -13,28 +13,6 @@ Tetromino::Tetromino(const Renderer* renderer, Board* board, int X = 0, int Y = 
 	ChangeType(type);
 }
 
-Tetromino::Tetromino(const Tetromino& other)
-	: renderer(other.renderer), board(other.board), x(other.x), y(other.y), type(other.type), rotation(other.rotation)
-{
-	std::memcpy(tiles, other.tiles, 4 * 4 * sizeof(unsigned char));
-}
-
-Tetromino& Tetromino::operator=(const Tetromino& other)
-{
-	if (&other != this)
-	{
-		type = other.type;
-		board = other.board;
-		renderer = other.renderer;
-
-		x = other.x;
-		y = other.y;
-		rotation = other.rotation;
-		std::memcpy(tiles, other.tiles, 4 * 4 * sizeof(unsigned char));
-	}
-	return *this;
-}
-
 void Tetromino::ChangeType(MinoType type)
 {
 	std::memset(tiles, 0, sizeof(tiles));

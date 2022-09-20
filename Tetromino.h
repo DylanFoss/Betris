@@ -24,8 +24,6 @@ public:
 
 	Tetromino();
 	Tetromino(const Renderer* renderer, Board* board, int X, int Y, MinoType type);
-	Tetromino(const Tetromino& other);
-	Tetromino& operator=(const Tetromino& other);
 
 	void ChangeType(MinoType type);
 
