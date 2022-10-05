@@ -21,10 +21,17 @@ Game::Game(const Renderer* renderer, InputManager* input)
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
 	heldTetromino = Tetromino(renderer, &board, board.x - 6 * cellSize, board.y + 14 * cellSize, MinoType::I);
 
-	nextTitle = Font("res/fonts/pressStart2P.ttf", "Next", 14, 255, 255, 255, 255, 650, 550);
-	scoreTitle = Font("res/fonts/pressStart2P.ttf", "Score", 14, 255, 255, 255, 255, 50, 200);
-	score = Font("res/fonts/pressStart2P.ttf", "0", 14, 255, 255, 255, 255, 90, 150);
-	heldTitle = Font("res/fonts/pressStart2P.ttf", "Hold", 14, 255, 255, 255, 255, 50, 550);
+	nextTitle = Font("res/fonts/pressStart2P.ttf", "NEXT", 14, 255, 255, 255, 255, 650, 550);
+	heldTitle = Font("res/fonts/pressStart2P.ttf", "HOLD", 14, 255, 255, 255, 255, 60, 550);
+
+	scoreTitle = Font("res/fonts/pressStart2P.ttf", "SCORE", 12, 255, 255, 255, 255, 30, 260);
+	score = Font("res/fonts/pressStart2P.ttf", "0", 18, 255, 255, 255, 255, 30, 220);
+
+	linesTitle = Font("res/fonts/pressStart2P.ttf", "LINES", 12, 255, 255, 255, 255, 30, 180);
+	lines = Font("res/fonts/pressStart2P.ttf", "0", 18, 255, 255, 255, 255, 30, 140);
+
+	levelTitle = Font("res/fonts/pressStart2P.ttf", "LEVEL", 12, 255, 255, 255, 255, 30, 100);
+	level = Font("res/fonts/pressStart2P.ttf", "1", 18, 255, 255, 255, 255, 30, 60);
 
 }
 
@@ -182,9 +189,16 @@ void Game::Init()
 	IsHoldOnCooldown = 0;
 
 	nextTitle.Init();
-	scoreTitle.Init();
 	heldTitle.Init();
+
+	scoreTitle.Init();
 	score.Init();
+
+	linesTitle.Init();
+	lines.Init();
+
+	levelTitle.Init();
+	level.Init();
 
 }
 
@@ -256,7 +270,7 @@ void Game::Update(const double dt)
 					//TODO: clean up updating the score to be less messy (likely make an overlay class to handle offseting numeric strings)
 					scoreCalc.CalculateScore();
 					score.SetText(std::to_string(scoreTracker.GetScore()).c_str());
-					score.SetX(80 - 2 * score.GetText().size());
+					lines.SetText(std::to_string(scoreTracker.GetLines()).c_str());
 				}
 			}
 			break;
@@ -303,7 +317,14 @@ void Game::Draw(const double dt)
 	if(IsMinoHeld) heldTetromino.Draw();
 
 	nextTitle.Draw();
+	heldTitle.Draw();
+
 	scoreTitle.Draw();
 	score.Draw();
-	heldTitle.Draw();
+
+	linesTitle.Draw();
+	lines.Draw();
+
+	levelTitle.Draw();
+	level.Draw();
 }

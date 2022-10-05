@@ -48,8 +48,15 @@ private:
 
 	Font nextTitle;
 	Font scoreTitle;
+
 	Font heldTitle;
 	Font score;
+
+	Font linesTitle;
+	Font lines;
+
+	Font levelTitle;
+	Font level;
 
 	std::queue<int> tetrominoBucket;
 	int bucketCounter;
