@@ -128,8 +128,8 @@ void Game::RotateTetromino()
 {
 	int x = 0, y = 0;
 
-	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) std::cout << currentTetromino.Rotate(true) << '\n';
-	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) std::cout << currentTetromino.Rotate(false) << '\n';
+	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) currentTetromino.Rotate(true);
+	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) currentTetromino.Rotate(false);
 }
 
 void Game::SwapTetromino()

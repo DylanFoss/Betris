@@ -331,7 +331,8 @@ int Tetromino::Rotate(bool lr)
 		}
 	}
 
-	return 0;
+	// rotations reset
+	return -1;
 }
 
 bool Tetromino::Advance()
