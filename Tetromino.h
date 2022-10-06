@@ -26,7 +26,7 @@ public:
 	void ChangeType(MinoType type);
 
 	void Move(int X, int Y);
-	void Rotate(bool lr);
+	int Rotate(bool lr);
 	bool CollisionCheck();
 	bool CollisionCheck(int x, int y);
 	bool Advance();

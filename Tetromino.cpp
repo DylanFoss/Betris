@@ -109,9 +109,9 @@ void Tetromino::Move(int X, int Y)
 	y +=  board->cellSize * Y;
 }
 
-void Tetromino::Rotate(bool lr)
+int Tetromino::Rotate(bool lr)
 {
-	if (type == MinoType::O) return;
+	if (type == MinoType::O) return 0;
 
 	unsigned char ret[4][4] = { 0 };
 
@@ -144,6 +144,8 @@ void Tetromino::Rotate(bool lr)
 	if (rotation < 0) rotation = 3;
 	if (rotation > 3) rotation = 0;
 
+	int numTests = 0;
+
 	switch (type)
 	{
 		case MinoType::I:
@@ -166,9 +168,10 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(1, 0);
 
 				std::cout << "Test 1" << '\n';
+				numTests++;
 
 			}
-			else return;
+			else return numTests;
 
 			//test 2
 
@@ -183,8 +186,9 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(-2, 0);
 
 				std::cout << "Test 2" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			//test 3
 
@@ -199,8 +203,9 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(1, -2);
 
 				std::cout << "Test 3" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			//test 4
 
@@ -214,8 +219,9 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Move(2, -1);
 				else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(-2, 1);
 				std::cout << "Test 4" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			break;
 		case MinoType::L:
@@ -252,9 +258,10 @@ void Tetromino::Rotate(bool lr)
 				else Move(1, 0);
 
 				std::cout << "Test 1" << '\n';
+				numTests++;
 
 			}
-			else return;
+			else return numTests;
 
 			//test 2
 			if (CollisionCheck())
@@ -268,8 +275,9 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 3 && rotation == 0) || (lastRot == 3 && rotation == 2)) Move(-1, -1);
 
 				std::cout << "Test 2" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			//test 3
 			if (CollisionCheck())
@@ -281,8 +289,9 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2) || (lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Move(0, 2);
 
 				std::cout << "Test 3" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			//test 4
 			if (CollisionCheck())
@@ -296,13 +305,14 @@ void Tetromino::Rotate(bool lr)
 				else if ((lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Move(-1, 2);
 
 				std::cout << "Test 4" << '\n';
+				numTests++;
 			}
-			else return;
+			else return numTests;
 
 			break;
 	}
 
-	if (!CollisionCheck()) return;
+	if (!CollisionCheck()) return numTests;
 
 	// all checks have failed, rotate back.
 
@@ -320,6 +330,8 @@ void Tetromino::Rotate(bool lr)
 			tiles[i][j] = initial[i][j];
 		}
 	}
+
+	return 0;
 }
 
 bool Tetromino::Advance()

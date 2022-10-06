@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 #define BW			12
 #define BH			18
@@ -127,8 +128,8 @@ void Game::RotateTetromino()
 {
 	int x = 0, y = 0;
 
-	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) currentTetromino.Rotate(true);
-	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) currentTetromino.Rotate(false);
+	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) std::cout << currentTetromino.Rotate(true) << '\n';
+	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) std::cout << currentTetromino.Rotate(false) << '\n';
 }
 
 void Game::SwapTetromino()
