@@ -12,7 +12,7 @@ Game::Game(const Renderer* renderer, InputManager* input)
 
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
 
-	currentTetromino = Tetromino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
+	currentTetromino = ActiveMino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
 	ghostPiece = GhostPiece(currentTetromino);
 	queue1 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 14 * cellSize + cellSize, MinoType::I);
 	queue2 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 11 * cellSize + cellSize, MinoType::I);

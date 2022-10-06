@@ -15,6 +15,7 @@
 
 #include "Board.h"
 #include "Tetromino.h"
+#include "ActiveMino.h"
 #include "GhostPiece.h"
 #include "Font.h"
 
@@ -37,7 +38,7 @@ private:
 	ScoreCalculator scoreCalc;
 
 	Board board;
-	Tetromino currentTetromino;
+	ActiveMino currentTetromino;
 	GhostPiece ghostPiece;
 
 	Tetromino heldTetromino;
