@@ -13,6 +13,8 @@ private:
 	bool wasTSpin;
 	bool wasMiniTSpin;
 
+	int lastWallKick;
+
 	int linesCleared;
 	int comboMultiplier;
 
@@ -38,6 +40,7 @@ public:
 
 	void DoFullCalc() { fullCalculation = true; }
 	void SetLinesCleared(int numLines) { linesCleared = numLines; }
+	void SetLastWallKick(int numWallKicks) { lastWallKick = numWallKicks; }
 	void IncrementHardDropCounter() { hardDropCounter++; }
 	void IncrementSoftDropCounter() { softDropCounter++; }
 };

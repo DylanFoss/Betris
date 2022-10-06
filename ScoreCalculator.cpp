@@ -2,19 +2,19 @@
 #include <iostream>
 
 ScoreCalculator::ScoreCalculator()
-	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
 
 ScoreCalculator::ScoreCalculator(Score* scoreTracker)
-	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
 
 ScoreCalculator::ScoreCalculator(Score* scoreTracker, Tetromino* currentTetromino, Board* board)
-	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
@@ -92,7 +92,7 @@ void ScoreCalculator::CalculateScore()
 				diags.emplace_back(board->IsElementEmpty(board->GetGridX(currentTetromino->x) + xOffset + 2, board->GetGridY(currentTetromino->y) + yOffset));
 				diags.emplace_back(board->IsElementEmpty(board->GetGridX(currentTetromino->x) + xOffset, board->GetGridY(currentTetromino->y) + yOffset));
 
-				std::cout << diags.at(0) << diags.at(1) << diags.at(2) << diags.at(3) << "\n";
+				//std::cout << diags.at(0) << diags.at(1) << diags.at(2) << diags.at(3) << "\n";
 
 				int emptyCornerCounter = 0;
 				for (bool empty : diags)
@@ -130,13 +130,21 @@ void ScoreCalculator::CalculateScore()
 					if (emptyForwardCounter > 0)
 					{
 						wasMiniTSpin = true;
+
+						// exception, if a 1,2 offset was applied during rotation (the 4th test), it still counts as a full T spin.
+						if (lastWallKick == 4) wasMiniTSpin = false;
 					}
 
 				}
 			}
 		}
 
-
+		if (wasTSpin)
+		{
+			std::cout << "T-Spin Performed";
+			if (wasMiniTSpin) std::cout << " but it was a mini :(";
+			std::cout << '\n';
+		}
 
 		//Back TO Back TODO
 
