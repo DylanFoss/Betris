@@ -27,10 +27,6 @@ public:
 
 	void Move(int X, int Y);
 	int Rotate(bool lr);
-	bool CollisionCheck();
-	bool CollisionCheck(int x, int y);
-	bool Advance();
-	void Lock();
 
 	void Reset();
 	void Reset(MinoType type);
