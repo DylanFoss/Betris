@@ -12,15 +12,15 @@ Game::Game(const Renderer* renderer, InputManager* input)
 
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
 
-	currentTetromino = ActiveMino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
-	ghostPiece = GhostPiece(currentTetromino);
+	currentMino = ActiveMino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
+	ghostMino = GhostMino(currentMino);
 	queue1 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 14 * cellSize + cellSize, MinoType::I);
 	queue2 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 11 * cellSize + cellSize, MinoType::I);
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
 	heldTetromino = Tetromino(renderer, &board, board.x - 6 * cellSize, board.y + 14 * cellSize, MinoType::I);
 
 	scoreTracker = Score();
-	scoreCalc = ScoreCalculator(&scoreTracker, &currentTetromino, &board);
+	scoreCalc = ScoreCalculator(&scoreTracker, &currentMino, &board);
 
 	nextTitle = Font("res/fonts/pressStart2P.ttf", "NEXT", 14, 255, 255, 255, 255, 650, 550);
 	heldTitle = Font("res/fonts/pressStart2P.ttf", "HOLD", 14, 255, 255, 255, 255, 60, 550);
@@ -38,7 +38,7 @@ Game::Game(const Renderer* renderer, InputManager* input)
 
 void Game::UpdateTetrominoes()
 {
-	currentTetromino.Reset(static_cast<MinoType>(queue1.getType()), board.x + 5 * cellSize, board.y + 15 * cellSize);
+	currentMino.Reset(static_cast<MinoType>(queue1.getType()), board.x + 5 * cellSize, board.y + 15 * cellSize);
 	queue1.Reset(static_cast<MinoType>(queue2.getType()), board.x + 15 * cellSize, board.y + 14 * cellSize);
 	queue2.Reset(static_cast<MinoType>(queue3.getType()), board.x + 15 * cellSize, board.y + 9 * cellSize);
 	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4 * cellSize);
@@ -95,7 +95,7 @@ void Game::MoveTetromino(const double dt)
 
 	if (input->IsKeyPressed(32))
 	{
-		while (currentTetromino.Advance())
+		while (currentMino.Advance())
 		{
 			scoreCalc.IncrementHardDropCounter();
 		};
@@ -103,7 +103,7 @@ void Game::MoveTetromino(const double dt)
 	}
 	else if (input->IsKeyPressedRepeatable('s', dt) || input->IsKeyPressedRepeatable('S', dt))
 	{
-		if (!currentTetromino.CollisionCheck(currentTetromino.x, currentTetromino.y - cellSize))
+		if (!currentMino.CollisionCheck(currentMino.x, currentMino.y - cellSize))
 		{
 			stepCounter = 1000;
 			scoreCalc.IncrementSoftDropCounter();
@@ -112,13 +112,13 @@ void Game::MoveTetromino(const double dt)
 
 	if (x != 0 || y != 0)
 	{
-		int intialX = currentTetromino.x;
+		int intialX = currentMino.x;
 
-		currentTetromino.Move(x, y);
+		currentMino.Move(x, y);
 
-		if (currentTetromino.CollisionCheck())
+		if (currentMino.CollisionCheck())
 		{
-			currentTetromino.x = intialX;
+			currentMino.x = intialX;
 		}
 
 	}
@@ -131,8 +131,8 @@ void Game::RotateTetromino()
 	int x = 0, y = 0;
 
 	int numWallKicks = 0;
-	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) numWallKicks = currentTetromino.Rotate(true);
-	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) numWallKicks = currentTetromino.Rotate(false);
+	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) numWallKicks = currentMino.Rotate(true);
+	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) numWallKicks = currentMino.Rotate(false);
 	if (numWallKicks > 0) lastWallKick = numWallKicks;
 }
 
@@ -144,15 +144,15 @@ void Game::SwapTetromino()
 		{
 			if (IsMinoHeld)
 			{
-				MinoType temp = currentTetromino.getType();
-				currentTetromino.Reset(heldTetromino.getType(), board.x + 5 * cellSize, board.y + 15 * cellSize);
+				MinoType temp = currentMino.getType();
+				currentMino.Reset(heldTetromino.getType(), board.x + 5 * cellSize, board.y + 15 * cellSize);
 				heldTetromino.Reset(temp, board.x - 6 * cellSize, board.y + 14 * cellSize);
 
 				IsHoldOnCooldown = true;
 			}
 			else
 			{
-				heldTetromino.Reset(currentTetromino.getType());
+				heldTetromino.Reset(currentMino.getType());
 
 				tetrominoUpdate = true;
 				IsMinoHeld = true;
@@ -167,12 +167,12 @@ void Game::SwapTetromino()
 void Game::Init()
 {
 	scoreTracker = Score();
-	scoreCalc = ScoreCalculator(&scoreTracker, &currentTetromino, &board);
+	scoreCalc = ScoreCalculator(&scoreTracker, &currentMino, &board);
 
 	for (int i = 0; i < 2; i++)
 		GenerateTetrominoes();
 
-	currentTetromino.Reset(static_cast<MinoType>(GetNext()), board.x + 5 * cellSize, board.y + 15 * cellSize);
+	currentMino.Reset(static_cast<MinoType>(GetNext()), board.x + 5 * cellSize, board.y + 15 * cellSize);
 	queue1.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 14 * cellSize);
 	queue2.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 9 * cellSize);
 	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4  * cellSize);
@@ -181,7 +181,7 @@ void Game::Init()
 	ApplyOffset(queue2);
 	ApplyOffset(queue3);
 
-	ghostPiece.UpdatePosition(currentTetromino);
+	ghostMino.UpdatePosition(currentMino);
 	heldTetromino.Reset(MinoType::I, board.x - 6 * cellSize, board.y + 14 * cellSize);
 
 	gameOver = false;
@@ -221,14 +221,14 @@ void Game::Update(const double dt)
 					UpdateTetrominoes();
 					tetrominoUpdate = false;
 
-					if (currentTetromino.CollisionCheck())
+					if (currentMino.CollisionCheck())
 						gameOver = true;
 				}
 
 				SwapTetromino();
 				MoveTetromino(dt);
 				RotateTetromino();
-				ghostPiece.UpdatePosition(currentTetromino);
+				ghostMino.UpdatePosition(currentMino);
 
 				if (stepCounter < 1) //update every 1 second
 				{
@@ -237,23 +237,23 @@ void Game::Update(const double dt)
 				else
 				{
 
-					if (!currentTetromino.Advance())
+					if (!currentMino.Advance())
 					{
-						currentTetromino.Lock();
+						currentMino.Lock();
 
 						scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
 
 						//check for lines
 						for (int y = 0; y < 4; y++)
-							if (board.GetGridY(currentTetromino.y) + y < board.boardHeight - 1 && board.GetGridY(currentTetromino.y) + y >= 0)
+							if (board.GetGridY(currentMino.y) + y < board.boardHeight - 1 && board.GetGridY(currentMino.y) + y >= 0)
 							{
 								bool line = true;
 								for (int x = 0; x < board.boardWidth; x++)
-									line &= board.grid[board.GetGridY(currentTetromino.y) + y][x] != 0;
+									line &= board.grid[board.GetGridY(currentMino.y) + y][x] != 0;
 
 								if (line)
 								{
-									linesToClear.push_back(board.GetGridY(currentTetromino.y) + y);
+									linesToClear.push_back(board.GetGridY(currentMino.y) + y);
 								}
 							}
 
@@ -306,8 +306,8 @@ void Game::Draw(const double dt)
 	{
 		case (GameState::PLAYPHASE):
 			board.Draw();
-			ghostPiece.Draw();
-			currentTetromino.Draw();
+			ghostMino.Draw();
+			currentMino.Draw();
 			queue1.Draw();
 			queue2.Draw();
 			queue3.Draw();

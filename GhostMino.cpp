@@ -1,17 +1,17 @@
-#include "GhostPiece.h"
+#include "GhostMino.h"
 
-GhostPiece::GhostPiece() 
-	: Tetromino()
+GhostMino::GhostMino() 
+	: ActiveMino()
 {
 }
 
-GhostPiece::GhostPiece(const Tetromino& tetromino)
-	: Tetromino(tetromino)
+GhostMino::GhostMino(const ActiveMino& tetromino)
+	: ActiveMino(tetromino)
 {
 }
 
 
-void GhostPiece::UpdatePosition(const Tetromino& currentTetromino)
+void GhostMino::UpdatePosition(const ActiveMino& currentTetromino)
 {
 	x = currentTetromino.x;
 	y = currentTetromino.y;
@@ -26,7 +26,7 @@ void GhostPiece::UpdatePosition(const Tetromino& currentTetromino)
 	while (Advance()); //advance till we can't
 }
 
-void GhostPiece::Draw()
+void GhostMino::Draw()
 {
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)

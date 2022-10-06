@@ -14,9 +14,11 @@
 #include "ScoreCalculator.h"
 
 #include "Board.h"
+
 #include "Tetromino.h"
 #include "ActiveMino.h"
-#include "GhostPiece.h"
+#include "GhostMino.h"
+
 #include "Font.h"
 
 enum class GameState
@@ -38,8 +40,8 @@ private:
 	ScoreCalculator scoreCalc;
 
 	Board board;
-	ActiveMino currentTetromino;
-	GhostPiece ghostPiece;
+	ActiveMino currentMino;
+	GhostMino ghostMino;
 
 	Tetromino heldTetromino;
 
