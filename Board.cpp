@@ -60,6 +60,17 @@ int Board::GetGridY(int Y) const
 	return (Y - y) / cellSize;
 }
 
+bool Board::IsElementEmpty(int x, int y)
+{
+	if (x < 0 || x > boardWidth-1 || y < 0 || y > boardHeight-1) 	//OOB check
+		return false;
+
+	if (grid[y][x] == 0)
+		return true;
+
+	return false;
+}
+
 void Board::ClearLines(int gridY, int numLines)
 {
 	for (int lines = 0; lines < numLines; lines++)

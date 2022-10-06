@@ -9,9 +9,6 @@ Game::Game(const Renderer* renderer, InputManager* input)
 {
 	state = GameState::PLAYPHASE;
 
-	scoreTracker = Score();
-	scoreCalc = ScoreCalculator(&scoreTracker);
-
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
 
 	currentTetromino = Tetromino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
@@ -20,6 +17,9 @@ Game::Game(const Renderer* renderer, InputManager* input)
 	queue2 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 11 * cellSize + cellSize, MinoType::I);
 	queue3 = Tetromino(renderer, &board, board.x + 15 * cellSize + cellSize, board.y + 7 * cellSize + cellSize, MinoType::I);
 	heldTetromino = Tetromino(renderer, &board, board.x - 6 * cellSize, board.y + 14 * cellSize, MinoType::I);
+
+	scoreTracker = Score();
+	scoreCalc = ScoreCalculator(&scoreTracker, &currentTetromino, &board);
 
 	nextTitle = Font("res/fonts/pressStart2P.ttf", "NEXT", 14, 255, 255, 255, 255, 650, 550);
 	heldTitle = Font("res/fonts/pressStart2P.ttf", "HOLD", 14, 255, 255, 255, 255, 60, 550);
@@ -162,7 +162,7 @@ void Game::SwapTetromino()
 void Game::Init()
 {
 	scoreTracker = Score();
-	scoreCalc = ScoreCalculator(&scoreTracker);
+	scoreCalc = ScoreCalculator(&scoreTracker, &currentTetromino, &board);
 
 	for (int i = 0; i < 2; i++)
 		GenerateTetrominoes();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Score.h"
+#include "Tetromino.h"
 class ScoreCalculator
 {
 private:
@@ -8,12 +9,18 @@ private:
 
 	int softDropCounter;
 	int hardDropCounter;
+
+	bool wasTSpin;
+	bool wasMiniTSpin;
+
 	int linesCleared;
 	int comboMultiplier;
 
 	Score* scoreTracker;
-
 	bool fullCalculation;
+
+	Tetromino* currentTetromino; //used to check if a T-spin was performed
+	Board* board; //ditto
 
 	//DEBUG FLAGS
 	bool countSoftDrops = true;
@@ -23,6 +30,7 @@ public:
 
 	ScoreCalculator();
 	ScoreCalculator(Score* scoreTracker);
+	ScoreCalculator(Score* scoreTracker, Tetromino* currentTetromino, Board* board);
 
 	void CalculateScore();
 	void SoftReset();

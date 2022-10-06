@@ -26,6 +26,8 @@ public:
 	int GetGridX(int x) const;
 	int GetGridY(int y) const;
 
+	bool IsElementEmpty(int x, int y);
+
 	void ClearLines(int gridY, int numLines);
 	void ClearLines(const std::vector<int>& linesToClear);
 

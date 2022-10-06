@@ -372,5 +372,32 @@ void Tetromino::Draw()
 			if (tiles[i][j] == 0) {}
 			else renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), static_cast<MinoType>(tiles[i][j] - 1), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
 		}
+
+	//int xOffset = 0;
+	//int yOffset = 0;
+
+	//switch (rotation)
+	//{
+	//case 0:
+	//	break;
+	//case 1:
+	//	yOffset = 1;
+	//	break;
+	//case 2:
+	//	xOffset = 1;
+	//	yOffset = 1;
+	//	break;
+	//case 3:
+	//	xOffset = 1;
+	//	break;
+	//}
+
+	//if (type == MinoType::T)
+	//{
+	//	renderer->drawMino(board->cellSize, x + xOffset * 7, y + yOffset * 7, static_cast<MinoType>(5), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
+	//	renderer->drawMino(board->cellSize, x + 2*7 + xOffset * 7, y + yOffset * 7, static_cast<MinoType>(5), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
+	//	renderer->drawMino(board->cellSize, x + xOffset * 7, y + 2*7 + yOffset * 7, static_cast<MinoType>(5), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
+	//	renderer->drawMino(board->cellSize, x + 2*7 + xOffset * 7, y + 2*7 + yOffset * 7, static_cast<MinoType>(5), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
+	//}
 }
 

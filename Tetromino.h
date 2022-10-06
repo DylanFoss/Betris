@@ -16,8 +16,6 @@ public:
 
 	MinoType getType() const { return type; }
 
-	int GetBoardY();
-
 	int x, y;
 	int rotation;
 	unsigned char tiles[4][4];
