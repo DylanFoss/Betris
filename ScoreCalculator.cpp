@@ -2,19 +2,19 @@
 #include <iostream>
 
 ScoreCalculator::ScoreCalculator()
-	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), wasMiniTSpin(false), linesCleared(0), comboMultiplier(-1), backToBackCounter(-1), fullCalculation(false)
 {
 
 }
 
 ScoreCalculator::ScoreCalculator(Score* scoreTracker)
-	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), wasMiniTSpin(false), linesCleared(0), comboMultiplier(-1), backToBackCounter(-1), fullCalculation(false)
 {
 
 }
 
 ScoreCalculator::ScoreCalculator(Score* scoreTracker, ActiveMino* currentTetromino, Board* board)
-	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), wasMiniTSpin(false), linesCleared(0), comboMultiplier(-1), backToBackCounter(-1), fullCalculation(false)
 {
 
 }
@@ -23,41 +23,18 @@ void ScoreCalculator::CalculateScore()
 {
 	int roundScore = 0;
 
-	//calculate drops
+	//calculate soft drops
 	if (countSoftDrops)
 		roundScore += softDropCounter;
 
 	if (fullCalculation)
 	{
+		int actionScore = 0;
+		bool dificultAction = false;
+
+		//calculate hard drops
 		if (countHardDrops)
 			roundScore += hardDropCounter * 2;
-
-		//line clears
-
-		if (linesCleared == 0)
-		{
-			comboMultiplier = -1;
-		}
-		else
-		{
-			switch (linesCleared)
-			{
-			case(1):
-				roundScore += 100 * level;
-				break;
-			case(2):
-				roundScore += 300 * level;
-				break;
-			case(3):
-				roundScore += 500 * level;
-				break;
-			case(4):
-				roundScore += 800 * level;
-				break;
-			}
-
-			comboMultiplier++;
-		}
 
 		//Tspin detection
 		if (currentTetromino != nullptr && board != nullptr)
@@ -127,7 +104,7 @@ void ScoreCalculator::CalculateScore()
 						emptyForwardCounter += diags.at(0);
 						break;
 					}
-					
+
 					if (emptyForwardCounter > 0)
 					{
 						wasMiniTSpin = true;
@@ -147,7 +124,102 @@ void ScoreCalculator::CalculateScore()
 			std::cout << '\n';
 		}
 
-		//Back TO Back TODO
+		//line clears
+		if (linesCleared == 0)
+		{
+			comboMultiplier = -1;
+
+			if (wasTSpin)
+			{
+				if (wasMiniTSpin)
+				{
+					actionScore = 100 * level;
+				}
+				else
+				{
+					actionScore = 200 * level;
+				}
+				dificultAction = true;
+			}
+			else
+			{
+				backToBackCounter = -1;
+			}
+		}
+		else
+		{
+			switch (linesCleared)
+			{
+			case(1):
+				if (wasTSpin)
+				{
+					if (wasMiniTSpin)
+					{
+						actionScore += 200 * level;
+					}
+					else
+					{
+						actionScore += 800 * level;
+					}
+					dificultAction = true;
+					backToBackCounter++;
+				}
+				else
+				{
+					actionScore += 100 * level;
+					backToBackCounter = -1;
+				}
+				break;
+			case(2):
+				if (wasTSpin)
+				{
+					if (wasMiniTSpin)
+					{
+						actionScore += 400 * level;
+					}
+					else
+					{
+						actionScore += 1200 * level;
+					}
+					dificultAction = true;
+					backToBackCounter++;
+				}
+				else
+				{
+					actionScore += 300 * level;
+					backToBackCounter = -1;
+				}
+				break;
+			case(3):
+				if (wasTSpin && !wasMiniTSpin)
+				{
+					actionScore += 1600 * level;
+					dificultAction = true;
+					backToBackCounter++;
+				}
+				else
+				{
+					actionScore += 500 * level;
+					backToBackCounter = -1;
+				}
+				break;
+			case(4):
+				roundScore += 800 * level;
+				dificultAction = true;
+				backToBackCounter++;
+				break;
+			}
+
+			comboMultiplier++;
+		}
+
+		//Back TO Back
+
+		if (backToBackCounter > 0)
+			if (dificultAction)
+				actionScore *= 1.5;
+
+		roundScore += actionScore;
 
 		//Combo
 		if (comboMultiplier > 0)

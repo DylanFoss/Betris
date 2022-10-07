@@ -13,10 +13,9 @@ private:
 	bool wasTSpin;
 	bool wasMiniTSpin;
 
-	//int lastWallKick;
-
 	int linesCleared;
 	int comboMultiplier;
+	int backToBackCounter;
 
 	Score* scoreTracker;
 	bool fullCalculation;
