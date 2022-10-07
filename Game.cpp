@@ -126,14 +126,9 @@ void Game::MoveTetromino(const double dt)
 
 void Game::RotateTetromino()
 {
-	lastWallKick = 0;
-
 	int x = 0, y = 0;
-
-	int numWallKicks = 0;
-	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) numWallKicks = currentMino.Rotate(true);
-	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) numWallKicks = currentMino.Rotate(false);
-	if (numWallKicks > 0) lastWallKick = numWallKicks;
+	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) currentMino.Rotate(true);
+	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) currentMino.Rotate(false);
 }
 
 void Game::SwapTetromino()
@@ -189,7 +184,6 @@ void Game::Init()
 	stepCounter = 0;
 	lineClearWait = 0;
 	tetrominoUpdate = false;
-	lastWallKick = 0;
 
 	IsMinoHeld = 0;
 	IsHoldOnCooldown = 0;
@@ -265,8 +259,6 @@ void Game::Update(const double dt)
 							printf("Number of Lines: %d\n", linesToClear.size());
 						}
 						scoreCalc.SetLinesCleared(linesToClear.size());
-
-						scoreCalc.SetLastWallKick(lastWallKick); //for the T-spin exception
 
 						tetrominoUpdate = true;
 						IsHoldOnCooldown = false;

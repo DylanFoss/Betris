@@ -2,19 +2,19 @@
 #include <iostream>
 
 ScoreCalculator::ScoreCalculator()
-	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(nullptr), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
 
 ScoreCalculator::ScoreCalculator(Score* scoreTracker)
-	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+	: scoreTracker(scoreTracker), currentTetromino(nullptr), board(nullptr), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
 
-ScoreCalculator::ScoreCalculator(Score* scoreTracker, Tetromino* currentTetromino, Board* board)
-	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), lastWallKick(0), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
+ScoreCalculator::ScoreCalculator(Score* scoreTracker, ActiveMino* currentTetromino, Board* board)
+	: scoreTracker(scoreTracker), currentTetromino(currentTetromino), board(board), level(1), softDropCounter(0), hardDropCounter(0), wasTSpin(false), linesCleared(0), comboMultiplier(-1), fullCalculation(false)
 {
 
 }
@@ -62,8 +62,9 @@ void ScoreCalculator::CalculateScore()
 		//Tspin detection
 		if (currentTetromino != nullptr && board != nullptr)
 		{
-			if (currentTetromino->getType() == MinoType::T)
+			if (currentTetromino->getType() == MinoType::T && currentTetromino->RotatedThisTick())
 			{
+
 				int xOffset = 0;
 				int yOffset = 0;
 
@@ -132,7 +133,7 @@ void ScoreCalculator::CalculateScore()
 						wasMiniTSpin = true;
 
 						// exception, if a 1,2 offset was applied during rotation (the 4th test), it still counts as a full T spin.
-						if (lastWallKick == 4) wasMiniTSpin = false;
+						if (currentTetromino->NumWallKicksThisTick() == 4) wasMiniTSpin = false;
 					}
 
 				}

@@ -69,7 +69,6 @@ private:
 
 	float stepCounter;
 	bool tetrominoUpdate;
-	int lastWallKick;
 
 	//swap/holding
 	bool IsMinoHeld;

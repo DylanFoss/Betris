@@ -78,9 +78,9 @@ void Tetromino::Offset(int X, int Y)
 	y +=  board->cellSize * Y;
 }
 
-int Tetromino::Rotate(bool lr)
+void Tetromino::Rotate(bool lr)
 {
-	if (type == MinoType::O) return 0;
+	if (type == MinoType::O);
 
 	unsigned char ret[4][4] = { 0 };
 	int rotY;
@@ -129,9 +129,6 @@ int Tetromino::Rotate(bool lr)
 
 		break;
 	}
-
-	// rotations reset
-	return 0;
 }
 
 void Tetromino::Reset()

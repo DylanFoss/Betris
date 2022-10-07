@@ -26,7 +26,7 @@ public:
 	void ChangeType(MinoType type);
 
 	void Offset(int X, int Y);
-	int Rotate(bool lr);
+	void Rotate(bool lr);
 
 	void Reset();
 	void Reset(MinoType type);

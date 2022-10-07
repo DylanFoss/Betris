@@ -13,7 +13,7 @@ public:
 	ActiveMino(const Renderer* renderer, Board* board, int X, int Y, MinoType type);
 
 	bool Move(int X, int Y);
-	int Rotate(bool lr);
+	void Rotate(bool lr);
 	bool CollisionCheck();
 	bool CollisionCheck(int x, int y=0);
 	bool Advance();
@@ -24,5 +24,8 @@ public:
 	void Reset(MinoType type, int x, int y);
 
 	void ResetFlags();
+
+	bool RotatedThisTick() const { return rotatedThisTick; }
+	int	NumWallKicksThisTick() const { return numWallKicksThisTick; }
 };
 

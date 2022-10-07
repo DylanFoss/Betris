@@ -66,10 +66,10 @@ bool ActiveMino::Advance()
 }
 
 
-int ActiveMino::Rotate(bool lr)
+void ActiveMino::Rotate(bool lr)
 {
 	rotatedThisTick = true;
-	if (type == MinoType::O) return 0;
+	if (type == MinoType::O) return;
 
 	unsigned char ret[4][4] = { 0 };
 
@@ -103,7 +103,6 @@ int ActiveMino::Rotate(bool lr)
 	if (rotation > 3) rotation = 0;
 
 	int numTests = 0;
-
 	switch (type)
 	{
 	case MinoType::I:
@@ -120,15 +119,15 @@ int ActiveMino::Rotate(bool lr)
 		if (CollisionCheck())
 		{
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Move(-2, 0);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Move(2, 0);
-			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Move(-1, 0);
-			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(1, 0);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Offset(-2, 0);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Offset(2, 0);
+			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Offset(-1, 0);
+			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Offset(1, 0);
 
 			numTests++;
 
 		}
-		else return numTests;
+		else return;
 
 		//test 2
 
@@ -137,14 +136,14 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Move(1, 0);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Move(-1, 0);
-			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Move(2, 0);
-			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(-2, 0);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Offset(1, 0);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Offset(-1, 0);
+			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Offset(2, 0);
+			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Offset(-2, 0);
 
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		//test 3
 
@@ -153,14 +152,14 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Move(-2, -1);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Move(2, 1);
-			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Move(-1, 2);
-			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(1, -2);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Offset(-2, -1);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Offset(2, 1);
+			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Offset(-1, 2);
+			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Offset(1, -2);
 
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		//test 4
 
@@ -169,13 +168,13 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Move(1, 2);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Move(-1, -2);
-			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Move(2, -1);
-			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Move(-2, 1);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 3 && rotation == 2)) Offset(1, 2);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 2 && rotation == 3)) Offset(-1, -2);
+			else if ((lastRot == 1 && rotation == 2) || (lastRot == 0 && rotation == 3)) Offset(2, -1);
+			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Offset(-2, 1);
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		break;
 	case MinoType::L:
@@ -187,16 +186,16 @@ int ActiveMino::Rotate(bool lr)
 		// initial rotation
 		if (!lr)
 		{
-			if ((lastRot == 0 && rotation == 1)) Move(0, -1);
-			else if (lastRot == 1 && rotation == 2) Move(-1, 0);
-			else if (lastRot == 2 && rotation == 3) Move(0, +1);
-			else if (lastRot == 3 && rotation == 0) Move(+1, 0);
+			if ((lastRot == 0 && rotation == 1)) Offset(0, -1);
+			else if (lastRot == 1 && rotation == 2) Offset(-1, 0);
+			else if (lastRot == 2 && rotation == 3) Offset(0, +1);
+			else if (lastRot == 3 && rotation == 0) Offset(+1, 0);
 		}
 		else {
-			if ((lastRot == 0 && rotation == 3)) Move(-1, 0);
-			else if (lastRot == 3 && rotation == 2) Move(0, -1);
-			else if (lastRot == 2 && rotation == 1) Move(+1, 0);
-			else if (lastRot == 1 && rotation == 0) Move(0, +1);
+			if ((lastRot == 0 && rotation == 3)) Offset(-1, 0);
+			else if (lastRot == 3 && rotation == 2) Offset(0, -1);
+			else if (lastRot == 2 && rotation == 1) Offset(+1, 0);
+			else if (lastRot == 1 && rotation == 0) Offset(0, +1);
 		}
 
 		rotX = x;
@@ -208,13 +207,13 @@ int ActiveMino::Rotate(bool lr)
 		if (CollisionCheck())
 		{
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Move(-1, 0);
-			else Move(1, 0);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Offset(-1, 0);
+			else Offset(1, 0);
 
 			numTests++;
 
 		}
-		else return numTests;
+		else return;
 
 		//test 2
 		if (CollisionCheck())
@@ -222,14 +221,14 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1)) Move(-1, 1);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2)) Move(1, -1);
-			else if ((lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Move(1, 1);
-			else if ((lastRot == 3 && rotation == 0) || (lastRot == 3 && rotation == 2)) Move(-1, -1);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1)) Offset(-1, 1);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2)) Offset(1, -1);
+			else if ((lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Offset(1, 1);
+			else if ((lastRot == 3 && rotation == 0) || (lastRot == 3 && rotation == 2)) Offset(-1, -1);
 
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		//test 3
 		if (CollisionCheck())
@@ -237,12 +236,12 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1) || (lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Move(0, -2);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2) || (lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Move(0, 2);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1) || (lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Offset(0, -2);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2) || (lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Offset(0, 2);
 
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		//test 4
 		if (CollisionCheck())
@@ -250,19 +249,22 @@ int ActiveMino::Rotate(bool lr)
 			x = rotX;
 			y = rotY;
 
-			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1)) Move(-1, -2);
-			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2)) Move(1, 2);
-			else if ((lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Move(1, -2);
-			else if ((lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Move(-1, 2);
+			if ((lastRot == 0 && rotation == 1) || (lastRot == 2 && rotation == 1)) Offset(-1, -2);
+			else if ((lastRot == 1 && rotation == 0) || (lastRot == 1 && rotation == 2)) Offset(1, 2);
+			else if ((lastRot == 2 && rotation == 3) || (lastRot == 0 && rotation == 3)) Offset(1, -2);
+			else if ((lastRot == 3 && rotation == 2) || (lastRot == 3 && rotation == 0)) Offset(-1, 2);
 
 			numTests++;
 		}
-		else return numTests;
+		else return;
 
 		break;
 	}
 
-	if (!CollisionCheck()) return numTests;
+	numWallKicksThisTick = numTests;
+
+	if (!CollisionCheck()) return;
+
 
 	// all checks have failed, rotate back.
 
@@ -282,9 +284,6 @@ int ActiveMino::Rotate(bool lr)
 	}
 
 	rotatedThisTick = false;
-
-	// rotations reset
-	return -1;
 }
 
 void ActiveMino::Lock()
