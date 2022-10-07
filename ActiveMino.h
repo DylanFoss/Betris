@@ -19,6 +19,10 @@ public:
 	bool Advance();
 	void Lock();
 
+	void Reset();
+	void Reset(MinoType type);
+	void Reset(MinoType type, int x, int y);
+
 	void ResetFlags();
 };
 

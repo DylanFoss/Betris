@@ -43,7 +43,7 @@ bool ActiveMino::CollisionCheck(int x, int y)
 
 bool ActiveMino::Move(int X, int Y)
 {
-	if (x != 0 || y != 0)
+	if (X != 0 || Y != 0)
 	{
 		x += board->cellSize * X;
 		y += board->cellSize * Y;
@@ -68,6 +68,7 @@ bool ActiveMino::Advance()
 
 int ActiveMino::Rotate(bool lr)
 {
+	rotatedThisTick = true;
 	if (type == MinoType::O) return 0;
 
 	unsigned char ret[4][4] = { 0 };
@@ -280,6 +281,8 @@ int ActiveMino::Rotate(bool lr)
 		}
 	}
 
+	rotatedThisTick = false;
+
 	// rotations reset
 	return -1;
 }
@@ -290,6 +293,24 @@ void ActiveMino::Lock()
 		for (int j = 0; j < 4; j++)
 			if (tiles[i][j] != 0)
 				board->grid.at(board->GetGridY(y + i * board->cellSize)).at(board->GetGridX(x + j * board->cellSize)) = tiles[i][j];
+}
+
+void ActiveMino::Reset()
+{
+	ResetFlags();
+	Tetromino::Reset();
+}
+
+void ActiveMino::Reset(MinoType type)
+{
+	ResetFlags();
+	Tetromino::Reset(type);
+}
+
+void ActiveMino::Reset(MinoType type, int x, int y)
+{
+	ResetFlags();
+	Tetromino::Reset(type, x, y);
 }
 
 void ActiveMino::ResetFlags()

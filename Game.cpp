@@ -239,7 +239,7 @@ void Game::Update(const double dt)
 
 					if (!currentMino.Advance())
 					{
-						currentMino.Lock();
+ 						currentMino.Lock();
 
 						scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
 
