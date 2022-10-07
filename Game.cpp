@@ -110,18 +110,7 @@ void Game::MoveTetromino(const double dt)
 		}
 	}
 
-	if (x != 0 || y != 0)
-	{
-		int intialX = currentMino.x;
-
-		currentMino.Move(x, y);
-
-		if (currentMino.CollisionCheck())
-		{
-			currentMino.x = intialX;
-		}
-
-	}
+	currentMino.Move(x, y);
 }
 
 void Game::RotateTetromino()
