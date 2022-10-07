@@ -1,12 +1,12 @@
 #include "ActiveMino.h"
 
 ActiveMino::ActiveMino()
-	:Tetromino()
+	:Tetromino(), rotatedThisTick(false), numWallKicksThisTick(0)
 {
 }
 
 ActiveMino::ActiveMino(const Renderer* renderer, Board* board, int X, int Y, MinoType type)
-	: Tetromino(renderer,board, X, Y, type)
+	: Tetromino(renderer,board, X, Y, type), rotatedThisTick(false), numWallKicksThisTick(0)
 {
 }
 
@@ -41,11 +41,30 @@ bool ActiveMino::CollisionCheck(int x, int y)
 	return false;
 }
 
-void ActiveMino::Move(int X, int Y)
+bool ActiveMino::Move(int X, int Y)
 {
-	x += board->cellSize * X;
-	y += board->cellSize * Y;
+	if (x != 0 || y != 0)
+	{
+		x += board->cellSize * X;
+		y += board->cellSize * Y;
+
+		if (CollisionCheck())
+		{
+			x -= board->cellSize * X;
+			y -= board->cellSize * Y;
+			return false;
+		}
+		else ResetFlags();
+	}
+
+	return true;
 }
+
+bool ActiveMino::Advance()
+{
+	return Move(0, -1);
+}
+
 
 int ActiveMino::Rotate(bool lr)
 {
@@ -265,23 +284,16 @@ int ActiveMino::Rotate(bool lr)
 	return -1;
 }
 
-bool ActiveMino::Advance()
-{
-	y -= board->cellSize;
-
-	if (CollisionCheck())
-	{
-		y += board->cellSize;
-		return false;
-	}
-
-	return true;
-}
-
 void ActiveMino::Lock()
 {
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
 			if (tiles[i][j] != 0)
 				board->grid.at(board->GetGridY(y + i * board->cellSize)).at(board->GetGridX(x + j * board->cellSize)) = tiles[i][j];
+}
+
+void ActiveMino::ResetFlags()
+{
+	rotatedThisTick = 0;
+	numWallKicksThisTick = 0;
 }

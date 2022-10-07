@@ -2,16 +2,23 @@
 #include "Tetromino.h"
 class ActiveMino : public Tetromino
 {
+
+private:
+	bool rotatedThisTick;
+	int	numWallKicksThisTick;
+
 public:
 
 	ActiveMino();
 	ActiveMino(const Renderer* renderer, Board* board, int X, int Y, MinoType type);
 
-	void Move(int X, int Y);
+	bool Move(int X, int Y);
 	int Rotate(bool lr);
 	bool CollisionCheck();
-	bool CollisionCheck(int x, int y);
+	bool CollisionCheck(int x, int y=0);
 	bool Advance();
 	void Lock();
+
+	void ResetFlags();
 };
 

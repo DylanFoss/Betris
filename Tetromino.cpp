@@ -72,7 +72,7 @@ void Tetromino::ChangeType(MinoType type)
 	}
 }
 
-void Tetromino::Move(int X, int Y)
+void Tetromino::Offset(int X, int Y)
 {
 	x +=  board->cellSize * X;
 	y +=  board->cellSize * Y;
@@ -115,16 +115,16 @@ int Tetromino::Rotate(bool lr)
 
 			if (!lr)
 			{
-				if ((lastRot == 0 && rotation == 1)) Move(0, -1);
-				else if (lastRot == 1 && rotation == 2) Move(-1, 0);
-				else if (lastRot == 2 && rotation == 3) Move(0, +1);
-				else if (lastRot == 3 && rotation == 0) Move(+1, 0);
+				if ((lastRot == 0 && rotation == 1)) Offset(0, -1);
+				else if (lastRot == 1 && rotation == 2) Offset(-1, 0);
+				else if (lastRot == 2 && rotation == 3) Offset(0, +1);
+				else if (lastRot == 3 && rotation == 0) Offset(+1, 0);
 			}
 			else {
-				if ((lastRot == 0 && rotation == 3)) Move(-1, 0);
-				else if (lastRot == 3 && rotation == 2) Move(0, -1);
-				else if (lastRot == 2 && rotation == 1) Move(+1, 0);
-				else if (lastRot == 1 && rotation == 0) Move(0, +1);
+				if ((lastRot == 0 && rotation == 3)) Offset(-1, 0);
+				else if (lastRot == 3 && rotation == 2) Offset(0, -1);
+				else if (lastRot == 2 && rotation == 1) Offset(+1, 0);
+				else if (lastRot == 1 && rotation == 0) Offset(0, +1);
 			}
 
 		break;
