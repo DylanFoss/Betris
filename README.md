@@ -35,7 +35,7 @@ https://www.youtube.com/watch?v=PlB5suEUTrE
 
 ## Images:
 
-![image](https://user-images.githubusercontent.com/57671477/189981649-a2e646e1-f444-4ac6-847c-854923d16ac1.png)
+![image](https://user-images.githubusercontent.com/57671477/194481894-a5b52e81-aac0-4a8c-be7d-14d657cecd05.png)
 
 ## Special Thanks:
 To these two resources that allowed for painless text rendering.
