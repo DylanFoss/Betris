@@ -75,7 +75,6 @@ private:
 	bool IsHoldOnCooldown;
 
 	//line clearing
-	std::vector<int> linesToClear;
 	float lineClearWait;
 
 public:
@@ -94,7 +93,5 @@ public:
 	void Init();
 	void Update(const double deltaTime);
 	void Draw(const double deltaTime);
-
-	const std::vector<int>& GetLinesToClear() const { return linesToClear; };
 };
 

@@ -11,14 +11,14 @@ Board::Board()
 	x = 0;
 	y = 0;
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
-	timer = 0;
+	lineClearTimer = 0;
 }
 
 Board::Board(const Renderer* renderer, int boardWidth, int boardHeight, int cellSize, int x, int y)
 	: renderer(renderer), boardWidth(boardWidth), boardHeight(boardHeight), cellSize(cellSize), x(x), y(y)
 {
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
-	timer = 0;
+	lineClearTimer = 0;
 }
 
 Board::Board(const Board& board)
@@ -71,19 +71,21 @@ bool Board::IsElementEmpty(int x, int y)
 	return false;
 }
 
-void Board::ClearLines(int gridY, int numLines)
+void Board::FindLines(int gridY)
 {
-	for (int lines = 0; lines < numLines; lines++)
-		for (int x = 0; x < boardWidth; x++)
+	for (int y = 0; y < 4; y++)
+		if (gridY + y < boardHeight - 1 && gridY + y >= 0)
 		{
-			for (int y = gridY; y < boardHeight-1; y++)
-			{
-				grid[y][x] = grid[y + 1][x];
-			}
+			bool line = true;
+			for (int x = 0; x < boardWidth; x++)
+				line &= grid[gridY + y][x] != 0;
+
+			if (line) 
+				linesToClear.push_back(gridY + y);
 		}
 }
 
-void Board::ClearLines(const std::vector<int> &linesToClear)
+void Board::ClearLines()
 {
 	for (int lines = linesToClear.size()-1; lines > -1; lines--)
 		for (int x = 0; x < boardWidth; x++)
@@ -93,9 +95,12 @@ void Board::ClearLines(const std::vector<int> &linesToClear)
 				grid[y][x] = grid[y + 1][x];
 			}
 		}
+
+	linesToClear.clear();
 }
 
-void Board::Draw()
+
+void Board::Draw(const double dt)
 {
 	if (renderer == nullptr)
 	{
@@ -103,44 +108,23 @@ void Board::Draw()
 		return;
 	}
 
-	//draw grid
-	 
-	for (int i = 0; i < boardHeight; i++)
-		for (int j = 0; j < boardWidth; j++)
-		{
-			if (grid.at(i).at(j) == 0) {}
-			else renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), static_cast<MinoType>(grid.at(i).at(j) - 1), 255); //-1 as enum starts at 0 (should've used -1 for blank squares)
-		}
-
-	timer = 0;
-
-	DrawBorder();
-}
-
-void Board::Draw(const std::vector<int>& linesToClear, const double dt)
-{
-
-	if (renderer == nullptr)
-	{
-		printf("ERROR: Draw call attempted on object with no known renderer.");
-		return;
-	}
-
-	timer += dt;
-	//printf("%f", timer);
+	if (!linesToClear.empty())
+		lineClearTimer += dt;
+	else
+		lineClearTimer = 0;
 
 	//draw grid
 
 	for (int i = 0; i < boardHeight; i++)
 	{
-		bool name = false;
+		bool animateLine = false;
 
 		if (!linesToClear.empty())
-			for (int line : linesToClear) if (i == line) name = true;
+			for (int line : linesToClear) if (i == line) animateLine = true;
 
 		for (int j = 0; j < boardWidth; j++)
 		{
-			if (name)
+			if (animateLine)
 				AnimateClearedMino(i,j);
 			else
 				DrawGridMino(i, j);
@@ -181,15 +165,15 @@ void Board::AnimateClearedMino(int i, int j)
 	switch (animationType)
 	{
 		case (0):
-			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, j / (float)boardWidth))));
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, lineClearTimer / renderer->lerp(a, b, j / (float)boardWidth))));
 			break;
 
 		case (1):
-			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs(j - boardWidth / 2) / (float)boardWidth))));
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, lineClearTimer / renderer->lerp(a, b, std::abs(j - boardWidth / 2) / (float)boardWidth))));
 			break;
 
 		case (2):
-			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, timer / renderer->lerp(a, b, std::abs((j % boardWidth / 2) - boardWidth / 2) / (float)boardWidth))));
+			renderer->drawMino(cellSize, x + (j * (cellSize)), y + (i * (cellSize)), 255 - 90, 255 - 90, 255 - 90, renderer->lerp(255, 0, std::min(1.0f, lineClearTimer / renderer->lerp(a, b, std::abs((j % boardWidth / 2) - boardWidth / 2) / (float)boardWidth))));
 			break;
 
 	}

@@ -115,7 +115,6 @@ void Game::MoveTetromino(const double dt)
 
 void Game::RotateTetromino()
 {
-	int x = 0, y = 0;
 	if (input->IsKeyPressed('q') || input->IsKeyPressed('Q')) currentMino.Rotate(true);
 	if (input->IsKeyPressed('e') || input->IsKeyPressed('E')) currentMino.Rotate(false);
 }
@@ -226,28 +225,16 @@ void Game::Update(const double dt)
 
 						scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
 
-						//check for lines
-						for (int y = 0; y < 4; y++)
-							if (board.GetGridY(currentMino.y) + y < board.boardHeight - 1 && board.GetGridY(currentMino.y) + y >= 0)
-							{
-								bool line = true;
-								for (int x = 0; x < board.boardWidth; x++)
-									line &= board.grid[board.GetGridY(currentMino.y) + y][x] != 0;
+						board.FindLines(board.GetGridY(currentMino.y));
 
-								if (line)
-								{
-									linesToClear.push_back(board.GetGridY(currentMino.y) + y);
-								}
-							}
-
-						if (linesToClear.size() != 0)
+						if (board.GetFoundLines().size() != 0)
 						{
 							state = GameState::CLEARLINE;
 
 							board.GenerateLineClearAnimation();
-							printf("Number of Lines: %d\n", linesToClear.size());
+							printf("Number of Lines: %d\n", board.linesToClear.size());
 						}
-						scoreCalc.SetLinesCleared(linesToClear.size());
+						scoreCalc.SetLinesCleared(board.GetFoundLines().size());
 
 						tetrominoUpdate = true;
 						IsHoldOnCooldown = false;
@@ -270,8 +257,7 @@ void Game::Update(const double dt)
 			}
 			else
 			{
-				board.ClearLines(linesToClear);
-				linesToClear.clear();
+				board.ClearLines();
 				lineClearWait = 0;
 				state = GameState::PLAYPHASE;
 			}
@@ -286,33 +272,48 @@ void Game::Draw(const double dt)
 	switch (state)
 	{
 		case (GameState::PLAYPHASE):
-			board.Draw();
+			board.Draw(dt);
 			ghostMino.Draw();
 			currentMino.Draw();
 			queue1.Draw();
 			queue2.Draw();
 			queue3.Draw();
+
+			if (IsMinoHeld) heldTetromino.Draw();
+
+			nextTitle.Draw();
+			heldTitle.Draw();
+
+			scoreTitle.Draw();
+			score.Draw();
+
+			linesTitle.Draw();
+			lines.Draw();
+
+			levelTitle.Draw();
+			level.Draw();
 			break;
 
 		case (GameState::CLEARLINE):
-			board.Draw(linesToClear, dt);
+
+			board.Draw(dt);
 			queue1.Draw();
 			queue2.Draw();
 			queue3.Draw();
+
+			if (IsMinoHeld) heldTetromino.Draw();
+
+			nextTitle.Draw();
+			heldTitle.Draw();
+
+			scoreTitle.Draw();
+			score.Draw();
+
+			linesTitle.Draw();
+			lines.Draw();
+
+			levelTitle.Draw();
+			level.Draw();
 			break;
 	}
-
-	if(IsMinoHeld) heldTetromino.Draw();
-
-	nextTitle.Draw();
-	heldTitle.Draw();
-
-	scoreTitle.Draw();
-	score.Draw();
-
-	linesTitle.Draw();
-	lines.Draw();
-
-	levelTitle.Draw();
-	level.Draw();
 }

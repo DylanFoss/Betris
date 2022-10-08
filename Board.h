@@ -14,6 +14,7 @@ public:
 
 	int boardWidth, boardHeight;
 	std::vector<std::vector<unsigned char>> grid;
+	std::vector<int> linesToClear;
 
 	int x, y;
 	int cellSize;
@@ -28,19 +29,18 @@ public:
 
 	bool IsElementEmpty(int x, int y);
 
-	void ClearLines(int gridY, int numLines);
-	void ClearLines(const std::vector<int>& linesToClear);
-
-	void GenerateLineClearAnimation();
+	void FindLines(int gridY);
+	const std::vector<int>& GetFoundLines() const { return linesToClear; }
+	void ClearLines();
 
 	//Drawing
+	void GenerateLineClearAnimation();
 
 	//temp flags for line clear animations
-	float timer;
+	float lineClearTimer;
 	int animationType;
 	bool isFadeIn;
 
-	void Draw();
-	void Draw(const std::vector<int> &linesToClear, const double dt);
+	void Draw(const double dt);
 };
 
