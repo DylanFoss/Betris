@@ -296,6 +296,7 @@ void ActiveMino::Reset()
 {
 	ResetFlags();
 	wasLastMoveRotation = false;
+	isFlashing = false;
 	Tetromino::Reset();
 }
 
@@ -303,6 +304,7 @@ void ActiveMino::Reset(MinoType type)
 {
 	ResetFlags();
 	wasLastMoveRotation = false;
+	isFlashing = false;
 	Tetromino::Reset(type);
 }
 
@@ -310,6 +312,7 @@ void ActiveMino::Reset(MinoType type, int x, int y)
 {
 	ResetFlags();
 	wasLastMoveRotation = false;
+	isFlashing = false;
 	Tetromino::Reset(type, x, y);
 }
 
