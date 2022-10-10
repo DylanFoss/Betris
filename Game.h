@@ -67,7 +67,13 @@ private:
 	//logic
 	bool gameOver;
 
+	float stepDelay = 1;
 	float stepCounter;
+
+	float lockDelay = 0.5f;
+	float lockCounter;
+	float wasHardDrop;
+
 	bool tetrominoUpdate;
 
 	//swap/holding

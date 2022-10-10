@@ -6,7 +6,7 @@ ActiveMino::ActiveMino()
 }
 
 ActiveMino::ActiveMino(const Renderer* renderer, Board* board, int X, int Y, MinoType type)
-	: Tetromino(renderer,board, X, Y, type), rotatedThisTick(false), numWallKicksThisTick(0)
+	: Tetromino(renderer,board, X, Y, type), movedThisTick(false), rotatedThisTick(false), numWallKicksThisTick(0), isFlashing(false)
 {
 }
 
@@ -54,7 +54,7 @@ bool ActiveMino::Move(int X, int Y)
 			y -= board->cellSize * Y;
 			return false;
 		}
-		else ResetFlags();
+		else return HasMoved();
 	}
 
 	return true;
@@ -65,11 +65,9 @@ bool ActiveMino::Advance()
 	return Move(0, -1);
 }
 
-
-void ActiveMino::Rotate(bool lr)
+bool ActiveMino::Rotate(bool lr)
 {
-	rotatedThisTick = true;
-	if (type == MinoType::O) return;
+	if (type == MinoType::O) return HasRotated();
 
 	unsigned char ret[4][4] = { 0 };
 
@@ -127,7 +125,7 @@ void ActiveMino::Rotate(bool lr)
 			numTests++;
 
 		}
-		else return;
+		else return HasRotated();
 
 		//test 2
 
@@ -143,7 +141,7 @@ void ActiveMino::Rotate(bool lr)
 
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		//test 3
 
@@ -159,7 +157,7 @@ void ActiveMino::Rotate(bool lr)
 
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		//test 4
 
@@ -174,7 +172,7 @@ void ActiveMino::Rotate(bool lr)
 			else if ((lastRot == 2 && rotation == 1) || (lastRot == 3 && rotation == 0)) Offset(-2, 1);
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		break;
 	case MinoType::L:
@@ -213,7 +211,7 @@ void ActiveMino::Rotate(bool lr)
 			numTests++;
 
 		}
-		else return;
+		else return HasRotated();
 
 		//test 2
 		if (CollisionCheck())
@@ -228,7 +226,7 @@ void ActiveMino::Rotate(bool lr)
 
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		//test 3
 		if (CollisionCheck())
@@ -241,7 +239,7 @@ void ActiveMino::Rotate(bool lr)
 
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		//test 4
 		if (CollisionCheck())
@@ -256,14 +254,14 @@ void ActiveMino::Rotate(bool lr)
 
 			numTests++;
 		}
-		else return;
+		else return HasRotated();
 
 		break;
 	}
 
 	numWallKicksThisTick = numTests;
 
-	if (!CollisionCheck()) return;
+	if (!CollisionCheck()) return HasRotated();
 
 
 	// all checks have failed, rotate back.
@@ -283,7 +281,7 @@ void ActiveMino::Rotate(bool lr)
 		}
 	}
 
-	rotatedThisTick = false;
+	return false;
 }
 
 void ActiveMino::Lock()
@@ -297,23 +295,73 @@ void ActiveMino::Lock()
 void ActiveMino::Reset()
 {
 	ResetFlags();
+	wasLastMoveRotation = false;
 	Tetromino::Reset();
 }
 
 void ActiveMino::Reset(MinoType type)
 {
 	ResetFlags();
+	wasLastMoveRotation = false;
 	Tetromino::Reset(type);
 }
 
 void ActiveMino::Reset(MinoType type, int x, int y)
 {
 	ResetFlags();
+	wasLastMoveRotation = false;
 	Tetromino::Reset(type, x, y);
 }
 
 void ActiveMino::ResetFlags()
 {
-	rotatedThisTick = 0;
+	movedThisTick = false;
+	rotatedThisTick = false;
 	numWallKicksThisTick = 0;
+}
+
+void ActiveMino::ShouldFlash()
+{
+	if (movedThisTick || rotatedThisTick)
+		if (CollisionCheck(x, y - 1))
+			isFlashing = true;
+		else
+			isFlashing = false;
+}
+
+bool ActiveMino::HasRotated()
+{
+	rotatedThisTick = true;
+	wasLastMoveRotation = true;
+	return true;
+}
+
+bool ActiveMino::HasMoved()
+{
+	movedThisTick = true;
+	wasLastMoveRotation = false;
+	return true;
+}
+
+void ActiveMino::Update(double dt)
+{
+	ShouldFlash();
+	ResetFlags();
+}
+
+void ActiveMino::Draw(double dt)
+{
+	if (!isFlashing)
+		Tetromino::Draw();
+	else
+	{
+		timer += dt;
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+			{
+				if (tiles[i][j] == 0) {}
+				else renderer->drawMino(board->cellSize, x + (j * (board->cellSize)), y + (i * (board->cellSize)), static_cast<MinoType>(tiles[i][j] - 1), renderer->lerp(255, 128, 0.5f * sin(2 * PI * 1 * timer) + 0.5f));
+			}
+		if (timer > 1) timer = 0;
+	}
 }

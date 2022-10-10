@@ -39,7 +39,7 @@ void ScoreCalculator::CalculateScore()
 		//Tspin detection
 		if (currentTetromino != nullptr && board != nullptr)
 		{
-			if (currentTetromino->getType() == MinoType::T && currentTetromino->RotatedThisTick())
+			if (currentTetromino->getType() == MinoType::T && currentTetromino->WasLastMoveRotation())
 			{
 
 				int xOffset = 0;

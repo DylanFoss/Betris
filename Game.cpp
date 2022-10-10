@@ -81,7 +81,6 @@ void Game::GenerateTetrominoes()
 	std::random_device rd;
 	unsigned seed = rd();
 	std::shuffle(std::begin(tetrominoes), std::end(tetrominoes), std::default_random_engine(seed));
-
 	for (int type : tetrominoes)
 		tetrominoBucket.push(type); 
 }
@@ -99,13 +98,15 @@ void Game::MoveTetromino(const double dt)
 		{
 			scoreCalc.IncrementHardDropCounter();
 		};
-		stepCounter = 1000;
+		wasHardDrop = true;
+		stepCounter = stepDelay;
+		lockCounter = lockDelay;
 	}
 	else if (input->IsKeyPressedRepeatable('s', dt) || input->IsKeyPressedRepeatable('S', dt))
 	{
 		if (!currentMino.CollisionCheck(currentMino.x, currentMino.y - cellSize))
 		{
-			stepCounter = 1000;
+			stepCounter = stepDelay;
 			scoreCalc.IncrementSoftDropCounter();
 		}
 	}
@@ -170,6 +171,8 @@ void Game::Init()
 	gameOver = false;
 
 	stepCounter = 0;
+	lockCounter = 0;
+	wasHardDrop = false;
 	lineClearWait = 0;
 	tetrominoUpdate = false;
 
@@ -194,7 +197,6 @@ void Game::Update(const double dt)
 {
 	switch (state)
 	{
-
 		case (GameState::PLAYPHASE):
 			if (!gameOver)
 			{
@@ -211,42 +213,58 @@ void Game::Update(const double dt)
 				MoveTetromino(dt);
 				RotateTetromino();
 				ghostMino.UpdatePosition(currentMino);
+				//currentMino.ShouldFlash();
 
-				if (stepCounter < 1) //update every 1 second
+				if (stepCounter < stepDelay) //update every 1 second
 				{
 					stepCounter += dt;
 				}
 				else
 				{
-
 					if (!currentMino.Advance())
 					{
- 						currentMino.Lock();
+						if (wasHardDrop) { wasHardDrop = false; }
+						else if ((currentMino.MovedThisTick() || currentMino.RotatedThisTick())) { lockCounter = 0; }
 
-						scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
-
-						board.FindLines(board.GetGridY(currentMino.y));
-
-						if (board.GetFoundLines().size() != 0)
+						if (lockCounter < lockDelay)
 						{
-							state = GameState::CLEARLINE;
-
-							board.GenerateLineClearAnimation();
-							printf("Number of Lines: %d\n", board.linesToClear.size());
+							lockCounter += dt;
 						}
-						scoreCalc.SetLinesCleared(board.GetFoundLines().size());
+						else
+						{
+							currentMino.Lock();
 
-						tetrominoUpdate = true;
-						IsHoldOnCooldown = false;
+							scoreCalc.DoFullCalc(); //set flag to do a real score calulation this time.
 
+							board.FindLines(board.GetGridY(currentMino.y));
+
+							if (board.GetFoundLines().size() != 0)
+							{
+								state = GameState::CLEARLINE;
+
+								board.GenerateLineClearAnimation();
+								printf("Number of Lines: %d\n", board.linesToClear.size());
+							}
+							scoreCalc.SetLinesCleared(board.GetFoundLines().size());
+
+							tetrominoUpdate = true;
+							IsHoldOnCooldown = false;
+
+							lockCounter = 0;
+							stepCounter = 0;
+						}
 					}
-					stepCounter = 0;
-
+					else
+					{
+						//currentMino.SetIsFlashing(false);
+						stepCounter = 0;
+					}
 					//TODO: clean up updating the score to be less messy (likely make an overlay class to handle offseting numeric strings)
 					scoreCalc.CalculateScore();
 					score.SetText(std::to_string(scoreTracker.GetScore()).c_str());
 					lines.SetText(std::to_string(scoreTracker.GetLines()).c_str());
 				}
+				currentMino.Update(dt);
 			}
 			break;
 		case (GameState::CLEARLINE):
@@ -274,7 +292,7 @@ void Game::Draw(const double dt)
 		case (GameState::PLAYPHASE):
 			board.Draw(dt);
 			ghostMino.Draw();
-			currentMino.Draw();
+			currentMino.Draw(dt);
 			queue1.Draw();
 			queue2.Draw();
 			queue3.Draw();
