@@ -5,9 +5,12 @@ private:
 	int score;
 	int lines;
 	int level;
+
+	int linesToLevelUp;
+	int linesCounter;
 public:
 
-	Score();
+	Score(int level = 1, int linesToLevelUp = 10, int score = 0, int lines = 0);
 
 	void Init();
 
