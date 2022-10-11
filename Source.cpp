@@ -40,13 +40,9 @@ typedef struct
 std::chrono::time_point < std::chrono::high_resolution_clock> t1;
 
 float logicCounter = 0;
-int typeCounter = 0;
 
 Renderer renderer = Renderer(SH, SW, pixelScale);
 InputManager input = InputManager();
-
-//Board board = Board(&renderer, BW, BH, cellSize, 1 * cellSize, 1 * cellSize);
-//Tetromino tetromino = Tetromino(&renderer, &board, 5*cellSize+cellSize, 14*cellSize + cellSize, MinoType::T);
 
 Game game = Game(&renderer, &input);
 
