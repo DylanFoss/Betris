@@ -151,6 +151,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="GhostMino.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="ActiveMino.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameSettings.h" />
     <ClInclude Include="GhostMino.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ActiveMino.h" />

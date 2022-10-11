@@ -8,9 +8,10 @@
 Game::Game(const Renderer* renderer, InputManager* input)
 	:renderer(renderer), input(input)
 {
-	state = GameState::PLAYPHASE;
-
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
+
+	state = GameState::PLAYPHASE;
+	settings = GameSettings(1, 15, 1.0f, 0.3f);
 
 	currentMino = ActiveMino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
 	ghostMino = GhostMino(currentMino);
@@ -33,6 +34,54 @@ Game::Game(const Renderer* renderer, InputManager* input)
 
 	levelTitle = Font("res/fonts/pressStart2P.ttf", "LEVEL", 12, 255, 255, 255, 255, 30, 100);
 	level = Font("res/fonts/pressStart2P.ttf", "1", 18, 255, 255, 255, 255, 30, 60);
+
+}
+
+void Game::Init()
+{
+	scoreTracker = Score(settings.levelStart);
+	scoreCalc = ScoreCalculator(&scoreTracker, &currentMino, &board);
+
+	for (int i = 0; i < 2; i++)
+		GenerateTetrominoes();
+
+	currentMino.Reset(static_cast<MinoType>(GetNext()), board.x + 5 * cellSize, board.y + 15 * cellSize);
+	queue1.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 14 * cellSize);
+	queue2.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 9 * cellSize);
+	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4 * cellSize);
+
+	ApplyOffset(queue1);
+	ApplyOffset(queue2);
+	ApplyOffset(queue3);
+
+	ghostMino.UpdatePosition(currentMino);
+	heldTetromino.Reset(MinoType::I, board.x - 6 * cellSize, board.y + 14 * cellSize);
+
+	gameOver = false;
+
+	stepCounter = 0;
+	lockCounter = 0;
+	wasHardDrop = false;
+	lineClearWait = 0;
+	tetrominoUpdate = false;
+
+	IsMinoHeld = 0;
+	IsHoldOnCooldown = 0;
+
+	CalculateStepDelay();
+
+	//hud init
+	nextTitle.Init();
+	heldTitle.Init();
+
+	scoreTitle.Init();
+	score.Init();
+
+	linesTitle.Init();
+	lines.Init();
+
+	levelTitle.Init();
+	level.Init();
 
 }
 
@@ -147,50 +196,19 @@ void Game::SwapTetromino()
 	}
 }
 
-
-void Game::Init()
+void Game::CalculateStepDelay()
 {
-	scoreTracker = Score();
-	scoreCalc = ScoreCalculator(&scoreTracker, &currentMino, &board);
+	float formulaLevel = scoreTracker.GetLevel()-1;
+	float lastLevel = settings.levelSoftCap-1;
+	if (formulaLevel > settings.levelSoftCap) formulaLevel = lastLevel;
+	stepDelay = renderer->lerp(settings.stepDelayInital, settings.stepDelayFinal, formulaLevel / lastLevel);
+}
 
-	for (int i = 0; i < 2; i++)
-		GenerateTetrominoes();
-
-	currentMino.Reset(static_cast<MinoType>(GetNext()), board.x + 5 * cellSize, board.y + 15 * cellSize);
-	queue1.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 14 * cellSize);
-	queue2.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 9 * cellSize);
-	queue3.Reset(static_cast<MinoType>(GetNext()), board.x + 15 * cellSize, board.y + 4  * cellSize);
-
-	ApplyOffset(queue1);
-	ApplyOffset(queue2);
-	ApplyOffset(queue3);
-
-	ghostMino.UpdatePosition(currentMino);
-	heldTetromino.Reset(MinoType::I, board.x - 6 * cellSize, board.y + 14 * cellSize);
-
-	gameOver = false;
-
-	stepCounter = 0;
-	lockCounter = 0;
-	wasHardDrop = false;
-	lineClearWait = 0;
-	tetrominoUpdate = false;
-
-	IsMinoHeld = 0;
-	IsHoldOnCooldown = 0;
-
-	nextTitle.Init();
-	heldTitle.Init();
-
-	scoreTitle.Init();
-	score.Init();
-
-	linesTitle.Init();
-	lines.Init();
-
-	levelTitle.Init();
-	level.Init();
-
+void Game::UpdateHUD()
+{
+	score.SetText(std::to_string(scoreTracker.GetScore()).c_str());
+	lines.SetText(std::to_string(scoreTracker.GetLines()).c_str());
+	level.SetText(std::to_string(scoreTracker.GetLevel()).c_str());
 }
 
 void Game::Update(const double dt)
@@ -213,7 +231,6 @@ void Game::Update(const double dt)
 				MoveTetromino(dt);
 				RotateTetromino();
 				ghostMino.UpdatePosition(currentMino);
-				//currentMino.ShouldFlash();
 
 				if (stepCounter < stepDelay) //update every 1 second
 				{
@@ -256,13 +273,13 @@ void Game::Update(const double dt)
 					}
 					else
 					{
-						//currentMino.SetIsFlashing(false);
 						stepCounter = 0;
 					}
-					//TODO: clean up updating the score to be less messy (likely make an overlay class to handle offseting numeric strings)
+					int lastLevel = scoreTracker.GetLevel();
 					scoreCalc.CalculateScore();
-					score.SetText(std::to_string(scoreTracker.GetScore()).c_str());
-					lines.SetText(std::to_string(scoreTracker.GetLines()).c_str());
+					if (lastLevel < scoreTracker.GetLevel())
+						CalculateStepDelay();
+					UpdateHUD();
 				}
 				currentMino.Update(dt);
 			}

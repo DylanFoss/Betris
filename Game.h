@@ -9,6 +9,7 @@
 
 #include "Renderer.h"
 #include "InputManager.h"
+#include "GameSettings.h"
 
 #include "Score.h"
 #include "ScoreCalculator.h"
@@ -34,6 +35,7 @@ private:
 	const Renderer* renderer;
 	InputManager* input;
 
+	GameSettings settings;
 	GameState state;
 
 	Score scoreTracker;
@@ -67,14 +69,15 @@ private:
 	//logic
 	bool gameOver;
 
+	float wasHardDrop;
+	bool tetrominoUpdate;
+
 	float stepDelay = 1;
 	float stepCounter;
+	void CalculateStepDelay();
 
 	float lockDelay = 0.5f;
 	float lockCounter;
-	float wasHardDrop;
-
-	bool tetrominoUpdate;
 
 	//swap/holding
 	bool IsMinoHeld;
@@ -95,6 +98,8 @@ public:
 	void MoveTetromino(const double dt);
 	void RotateTetromino();
 	void SwapTetromino();
+
+	void UpdateHUD();
 
 	void Init();
 	void Update(const double deltaTime);
