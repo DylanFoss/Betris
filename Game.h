@@ -2,13 +2,14 @@
 #include "Renderer.h"
 #include "InputManager.h"
 
+#include "GameData.h"
+
 #include "GameStateEnum.h"
 #include "GameStateManager.h"
 #include "GameStatePlayPhase.h"
 #include "GameStateCountdown.h"
 #include "GameStateClearLine.h"
 #include "GameStatePaused.h"
-#include "GameData.h"
 
 class Game
 {

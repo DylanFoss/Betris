@@ -3,33 +3,20 @@
 #include <random>
 
 Board::Board()
+	:renderer(nullptr), boardWidth(0), boardHeight(0), cellSize(0), x(0), y(0), lineClearTimer(0), animationType(0), isFadeIn(false)
 {
-	renderer = nullptr;
-	boardWidth = 0;
-	boardHeight = 0;
-	cellSize = 0;
-	x = 0;
-	y = 0;
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
-	lineClearTimer = 0;
 }
 
 Board::Board(const Renderer* renderer, int boardWidth, int boardHeight, int cellSize, int x, int y)
-	: renderer(renderer), boardWidth(boardWidth), boardHeight(boardHeight), cellSize(cellSize), x(x), y(y)
+	: renderer(renderer), boardWidth(boardWidth), boardHeight(boardHeight), cellSize(cellSize), x(x), y(y), lineClearTimer(0), animationType(0), isFadeIn(false)
 {
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
-	lineClearTimer = 0;
 }
 
 Board::Board(const Board& board)
-	: renderer(board.renderer)
+	: renderer(board.renderer), boardWidth(board.boardWidth), boardHeight(board.boardHeight), cellSize(board.cellSize), x(board.x), y(board.y), lineClearTimer(0), animationType(0), isFadeIn(false)
 {
-	boardWidth = board.boardWidth;
-	boardHeight = board.boardHeight;
-	cellSize = board.cellSize;
-	x = board.x;
-	y = board.y;
-
 	grid.resize(boardHeight, std::vector<unsigned char>(boardWidth, 0));
 }
 
