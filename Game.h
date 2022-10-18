@@ -34,9 +34,6 @@ private:
 	const Renderer* renderer;
 	InputManager* input;
 
-	GameSettings settings;
-	GameStateEnum state;
-
 	GameData gameData;
 
 	GameStateManager manager;
@@ -45,75 +42,9 @@ private:
 	GameStateClearLine gs_clearLine;
 	GameStatePaused gs_paused;
 
-	Score scoreTracker;
-	ScoreCalculator scoreCalc;
-
-	Board board;
-
-	ActiveMino currentMino;
-	GhostMino ghostMino;
-
-	Tetromino heldTetromino;
-
-	Tetromino queue1;
-	Tetromino queue2;
-	Tetromino queue3;
-
-	Font nextTitle;
-	Font scoreTitle;
-
-	Font heldTitle;
-	Font score;
-
-	Font linesTitle;
-	Font lines;
-
-	Font levelTitle;
-	Font level;
-
-	Font paused;
-	Font countdown;
-
-	//std::queue<int> tetrominoBucket;
-
-	//logic
-	bool gameOver;
-
-	float wasHardDrop;
-	bool tetrominoUpdate;
-
-	float stepDelay = 1;
-	float stepCounter;
-
-	float lockDelay = 0.5f;
-	float lockCounter;
-
-	float countdownCounter = 3;
-
-	//swap/holding
-	bool IsMinoHeld;
-	bool IsHoldOnCooldown;
-
-	//line clearing
-	float lineClearWait;
-
 public:
 
 	Game(const Renderer* renderer, InputManager* input);
-
-	void UpdateTetrominoes();
-	int GetNext();
-	void GenerateTetrominoes();
-	void ApplyOffset(Tetromino& mino);
-
-	void MoveTetromino(const double dt);
-	void RotateTetromino();
-	void SwapTetromino();
-
-	void CalculateStepDelay();
-
-	void UpdateHUD();
-	void InitHUD();
 
 	void Init();
 	void Update(const double deltaTime);
