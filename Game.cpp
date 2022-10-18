@@ -10,7 +10,7 @@ Game::Game(const Renderer* renderer, InputManager* input)
 {
 	board = Board(renderer, BW, BH, cellSize, 8*cellSize, cellSize);
 
-	state = GameState::PLAYPHASE;
+	state = GameState::PAUSED;
 	settings = GameSettings(1, 15, 1.0f, 0.3f);
 
 	currentMino = ActiveMino(renderer, &board, board.x + 5 * cellSize , board.y + 15 * cellSize, MinoType::I);
@@ -34,6 +34,9 @@ Game::Game(const Renderer* renderer, InputManager* input)
 
 	levelTitle = Font("res/fonts/pressStart2P.ttf", "LEVEL", 12, 255, 255, 255, 255, 30, 100);
 	level = Font("res/fonts/pressStart2P.ttf", "1", 18, 255, 255, 255, 255, 30, 60);
+
+	paused = Font("res/fonts/pressStart2P.ttf", "PAUSED", 16, 255, 255, 255, 255, (160*4/2)+15, 197*4 / 2);
+	countdown = Font("res/fonts/pressStart2P.ttf", "3", 22, 255, 255, 255, 255, (160 * 4 / 2) + 60, 197 * 4 / 2);
 
 }
 
@@ -70,6 +73,8 @@ void Game::Init()
 
 	CalculateStepDelay();
 
+	countdownCounter = 3;
+
 	//hud init
 	nextTitle.Init();
 	heldTitle.Init();
@@ -83,6 +88,8 @@ void Game::Init()
 	levelTitle.Init();
 	level.Init();
 
+	paused.Init();
+	countdown.Init();
 }
 
 void Game::UpdateTetrominoes()
@@ -227,6 +234,12 @@ void Game::Update(const double dt)
 						gameOver = true;
 				}
 
+				if (input->IsKeyPressed('p'))
+				{
+					state = GameState::PAUSED;
+					return;
+				}
+
 				SwapTetromino();
 				MoveTetromino(dt);
 				RotateTetromino();
@@ -298,6 +311,27 @@ void Game::Update(const double dt)
 			}
 
 			break;
+
+		case (GameState::PAUSED):
+
+			if (input->IsKeyPressed('p')) state = GameState::COUNTDOWN;
+
+			break;
+
+		case (GameState::COUNTDOWN):
+
+			if (countdownCounter > 0)
+			{
+				countdownCounter -= dt;
+				countdown.SetText(std::to_string((int)std::ceil(countdownCounter)).c_str());
+			}
+			else
+			{
+				state = GameState::PLAYPHASE;
+				countdownCounter = 3;
+			}
+
+			break;
 		
 	}
 }
@@ -349,6 +383,57 @@ void Game::Draw(const double dt)
 
 			levelTitle.Draw();
 			level.Draw();
+			break;
+		case (GameState::PAUSED):
+
+			board.Draw(dt);
+			ghostMino.Draw();
+			currentMino.Draw(dt);
+			queue1.Draw();
+			queue2.Draw();
+			queue3.Draw();
+
+			if (IsMinoHeld) heldTetromino.Draw();
+
+			nextTitle.Draw();
+			heldTitle.Draw();
+
+			scoreTitle.Draw();
+			score.Draw();
+
+			linesTitle.Draw();
+			lines.Draw();
+
+			levelTitle.Draw();
+			level.Draw();
+
+			paused.Draw();
+			break;
+
+		case (GameState::COUNTDOWN):
+
+			board.Draw(dt);
+			ghostMino.Draw();
+			currentMino.Draw(dt);
+			queue1.Draw();
+			queue2.Draw();
+			queue3.Draw();
+
+			if (IsMinoHeld) heldTetromino.Draw();
+
+			nextTitle.Draw();
+			heldTitle.Draw();
+
+			scoreTitle.Draw();
+			score.Draw();
+
+			linesTitle.Draw();
+			lines.Draw();
+
+			levelTitle.Draw();
+			level.Draw();
+
+			countdown.Draw();
 			break;
 	}
 }

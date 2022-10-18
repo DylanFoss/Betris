@@ -24,8 +24,11 @@
 
 enum class GameState
 {
+	COUNTDOWN,
 	PLAYPHASE,
-	CLEARLINE
+	CLEARLINE,
+	GAMEOVER,
+	PAUSED
 };
 
 class Game
@@ -63,6 +66,9 @@ private:
 	Font levelTitle;
 	Font level;
 
+	Font paused;
+	Font countdown;
+
 	std::queue<int> tetrominoBucket;
 	int bucketCounter;
 
@@ -78,6 +84,8 @@ private:
 
 	float lockDelay = 0.5f;
 	float lockCounter;
+
+	float countdownCounter = 3;
 
 	//swap/holding
 	bool IsMinoHeld;
@@ -100,6 +108,7 @@ public:
 	void SwapTetromino();
 
 	void UpdateHUD();
+	void InitHUD();
 
 	void Init();
 	void Update(const double deltaTime);
