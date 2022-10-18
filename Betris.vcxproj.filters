@@ -19,24 +19,39 @@
     <Filter Include="Source Files\States">
       <UniqueIdentifier>{b0b56886-08e3-4861-bcb7-05f94a55375b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\States\Interfaces">
+      <UniqueIdentifier>{3cd6b91b-f4b5-48a1-9d88-e70169210530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States\GameStates">
+      <UniqueIdentifier>{1e0d1f32-f30a-489b-a151-c1e643b7448e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\Interfaces">
+      <UniqueIdentifier>{26b9a450-d5d6-4b02-b755-f21931b9ad46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\GameStates">
+      <UniqueIdentifier>{552c81a9-896e-4765-b738-192b77bc18a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States\GameStates\Implementations">
+      <UniqueIdentifier>{9c351cb2-abb3-4d05-83ca-393f5b971a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States\GameStates\Implementations">
+      <UniqueIdentifier>{ae15a7a8-7d76-47f5-ae22-56454ce849c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{c1b2063a-7d59-4b90-a2f9-6a4a140cb9bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{6592af19-172d-42f6-b9b9-99a47014734f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Tetromino.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GhostMino.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
@@ -48,23 +63,59 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreCalculator.cpp">
+    <ClCompile Include="GameSettings.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IStateManager.cpp">
+      <Filter>Source Files\States\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IState.cpp">
+      <Filter>Source Files\States\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IStateChanger.cpp">
+      <Filter>Source Files\States\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files\States\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>Source Files\States\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePlayPhase.cpp">
+      <Filter>Source Files\States\GameStates\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateCountdown.cpp">
+      <Filter>Source Files\States\GameStates\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStatePaused.cpp">
+      <Filter>Source Files\States\GameStates\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateClearLine.cpp">
+      <Filter>Source Files\States\GameStates\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tetromino.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCalculator.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostMino.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ActiveMino.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GameSettings.cpp">
+    <ClCompile Include="TetrominoBucket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tetromino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Board.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,9 +123,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GhostMino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextRenderer.h">
@@ -89,10 +137,55 @@
     <ClInclude Include="ScoreCalculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActiveMino.h">
+    <ClInclude Include="GameSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameSettings.h">
+    <ClInclude Include="IStateManager.h">
+      <Filter>Header Files\States\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IStateChanger.h">
+      <Filter>Header Files\States\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IState.h">
+      <Filter>Header Files\States\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>Header Files\States\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files\States\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePlayPhase.h">
+      <Filter>Header Files\States\GameStates\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateEnum.h">
+      <Filter>Header Files\States\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateCountdown.h">
+      <Filter>Header Files\States\GameStates\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatePaused.h">
+      <Filter>Header Files\States\GameStates\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateClearLine.h">
+      <Filter>Header Files\States\GameStates\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tetromino.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostMino.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveMino.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="TetrominoBucket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

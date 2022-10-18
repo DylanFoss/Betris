@@ -46,7 +46,6 @@ InputManager input = InputManager();
 
 Game game = Game(&renderer, &input);
 
-
 void KeysDown(unsigned char key, int x, int y)
 {
 	input.KeysDown(key, x, y);

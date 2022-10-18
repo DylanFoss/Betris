@@ -3,9 +3,7 @@
 #include <array>
 #include <vector>
 #include <stack>
-#include <queue>
 #include <algorithm>
-#include <random>
 
 #include "Renderer.h"
 #include "InputManager.h"
@@ -19,17 +17,15 @@
 #include "Tetromino.h"
 #include "ActiveMino.h"
 #include "GhostMino.h"
-
 #include "Font.h"
 
-enum class GameState
-{
-	COUNTDOWN,
-	PLAYPHASE,
-	CLEARLINE,
-	GAMEOVER,
-	PAUSED
-};
+#include "GameStateEnum.h"
+#include "GameStateManager.h"
+#include "GameStatePlayPhase.h"
+#include "GameStateCountdown.h"
+#include "GameStateClearLine.h"
+#include "GameStatePaused.h"
+#include "GameData.h"
 
 class Game
 {
@@ -39,12 +35,21 @@ private:
 	InputManager* input;
 
 	GameSettings settings;
-	GameState state;
+	GameStateEnum state;
+
+	GameData gameData;
+
+	GameStateManager manager;
+	GameStateCountdown gs_countdown;
+	GameStatePlayPhase gs_playPhase;
+	GameStateClearLine gs_clearLine;
+	GameStatePaused gs_paused;
 
 	Score scoreTracker;
 	ScoreCalculator scoreCalc;
 
 	Board board;
+
 	ActiveMino currentMino;
 	GhostMino ghostMino;
 
@@ -69,8 +74,7 @@ private:
 	Font paused;
 	Font countdown;
 
-	std::queue<int> tetrominoBucket;
-	int bucketCounter;
+	//std::queue<int> tetrominoBucket;
 
 	//logic
 	bool gameOver;
@@ -80,7 +84,6 @@ private:
 
 	float stepDelay = 1;
 	float stepCounter;
-	void CalculateStepDelay();
 
 	float lockDelay = 0.5f;
 	float lockCounter;
@@ -106,6 +109,8 @@ public:
 	void MoveTetromino(const double dt);
 	void RotateTetromino();
 	void SwapTetromino();
+
+	void CalculateStepDelay();
 
 	void UpdateHUD();
 	void InitHUD();
